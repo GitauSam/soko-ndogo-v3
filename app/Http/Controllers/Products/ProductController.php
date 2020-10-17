@@ -10,7 +10,9 @@ use App\Models\Products\Repository\ProductRepository;
 use App\Modules\Products\ProductActivator;
 use App\Http\Requests\StoreProduct;
 use App\Exception;
-// use App\Exceptions\FetchProductException;
+use App\Exceptions\CreateProductException;
+use App\Exceptions\FetchProductException;
+use App\Notifications\ProductCreated;
 
 class ProductController extends Controller
 {
@@ -22,6 +24,15 @@ class ProductController extends Controller
     public function index()
     {
         
+        try {
+            $notifications = auth()->user()->unreadNotifications;
+            
+            return view('products.index', ['notifications' => $notifications]);
+                // ->with('i', (request()->input('page', 1) - 1) * 5);              
+        } catch(FetchProductException $e) {
+            // add logic to handle exception here
+        }
+
     }
 
     /**
@@ -46,9 +57,13 @@ class ProductController extends Controller
             $productActivator = new ProductActivator();
             $productActivator->addProduct($request);
 
+            auth()->user()->notify(new ProductCreated());
+
             return redirect()->route('products.index')->with('success','Product created successfully');
+        } catch (CreateProductException $e) {
+            // add logic to handle create product exception here
         } catch (Exception $e) {
-            // add logic to handle exception here
+            // add logic to handle any other exception here
         }
     }
 
@@ -60,7 +75,16 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $productActivator = new ProductActivator();
+            $product = $productActivator->returnProductById($id);
+            return view('products.show',['product' => $product, 
+                'loc' => 'storage/photos/products/thumbnails/']);
+        } catch (FetchProductException $e) {
+            // add logic to handle exception here
+        } catch (Exception $e) {
+
+        }
     }
 
     /**

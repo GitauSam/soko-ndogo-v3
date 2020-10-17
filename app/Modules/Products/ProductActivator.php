@@ -15,6 +15,18 @@ class ProductActivator
     public function addProduct($data) {
         return $this->modelRepository->createProduct($data);
     }
+
+    public function returnProductById($id) {
+        return $this->modelRepository->fetchProductById($id);
+    }
+
+    public function returnAllUserProducts() {
+        return $this->modelRepository->fetchAllUserProducts();
+    }
+
+    public function removeProduct($id) {
+        return $this->modelRepository->deactivateProduct($id);
+    }
 }
 
 

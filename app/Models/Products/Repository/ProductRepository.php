@@ -39,10 +39,40 @@ class ProductRepository
             }
         } catch (QueryException $e) {
             throw new CreateProductException($e);
+        } 
+    }
+
+    public function fetchProductById($id) {
+        try {
+            return Product::findOrFail($id);
+        } catch(QueryException $e) {
+            throw new FetchProductException($e);
         }
     }
 
+    public function fetchAllUserProducts() {
+        try {
+            return Product::
+                where([['seller_id', auth()->user()->id], ['status', 1]])
+                ->latest()
+                ->get();
+                // ->paginate(5);
+        } catch(QueryException $e) {
+            throw new FetchProductException($e);
+        }
+    }
 
+    public function deactivateProduct($id) {
+        try {
+            $product = $this->fetchProductById($id);
+            $product->status = 0;
+            $product->save();
+        } catch (QueryException $e) {
+            throw new DeactivateProductException($e);
+        } catch(Exception $e) {
+            throw new EditProductException($e);
+        }
+    }
         
 }
 ?>
