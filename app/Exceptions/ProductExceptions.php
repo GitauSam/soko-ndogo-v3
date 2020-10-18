@@ -18,4 +18,6 @@ class FetchProductImagesException extends RuntimeException {}
 class EditProductImageException extends RuntimeException {}
 
 class CreateProductImageException extends RuntimeException {}
+
+class DeactivateProductImageException extends RuntimeException {}
 ?>

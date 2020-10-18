@@ -37,5 +37,10 @@ class ProductImagesActivator {
         
     }
 
+    public function deactivateProductImage() {
+        dd("here");
+        $this->modelRepository->deactivateProductImage($imgName);
+    }
+
 }
 ?>

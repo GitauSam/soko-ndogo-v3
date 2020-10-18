@@ -18,7 +18,7 @@
                         </td>
                         <td class="border-grey-light border hover:bg-gray-100 p-3 flex flex-inline flex-wrap gap-1 justify-center">
                             <a class="w-16 text-center rounded-sm px-3 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('products.show', $product->id) }}">Show</a>
-                            <a class="w-16 text-center rounded-sm px-3 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="#">Edit</a>
+                            <a class="w-16 text-center rounded-sm px-3 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="{{ route('products.edit', $product->id) }}">Edit</a>
                             <button wire:click="deactivateProduct('{{ $product->id }}')" class="w-16 text-center rounded-sm px-3 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</button>
                         </td>
                     </tr>

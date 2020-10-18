@@ -2,20 +2,21 @@
     <div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col mt-4 py-4">
 
         <div class="px-7 flex flex-inline justify-center">
-            <h2 class="text-4xl font-semibold">Add Product</h2>
+            <h2 class="text-4xl font-semibold">Edit Product Details</h2>
         </div>
                     
         <div class="container mx-auto flex flex-col py-4">
             <hr class="mb-4"/>
             <div class="container mx-auto shadow py-2 mx-2">
-                <form class="w-2/3 mx-auto" action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
+                <form class="w-2/3 mx-auto" action="{{ route('products.update', $product->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
+                    {{method_field('PATCH')}}
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-product-name">
                                 Name
                             </label>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-product-name" name="product_name" type="text" placeholder="Product Name">
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-product-name" name="product_name" type="text" value="{{ $product->product_name }}">
                         </div>
                         <div class="flex flex-col w-full md:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-category-name">
@@ -25,13 +26,13 @@
 
                             <div class="inline-block relative w-2/3 my-1">
                                 <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="category" id="grid-category-name">
-                                    <option value="Cereals">Cereals</option>
-                                    <option value="Poultry Produce">Poultry Produce</option>
-                                    <option value="Dairy Produce">Dairy Produce</option>
-                                    <option value="Fruits">Fruits</option>
-                                    <option value="Legumes">Legumes</option>
-                                    <option value="Aquatic Produce">Aquatic Produce</option>
-                                    <option value="Beef">Beef</option>
+                                    <option value="Cereals" {{ ( "Cereals" == $product->category ) ? 'selected' : '' }} >Cereals</option>
+                                    <option value="Poultry Produce" {{ ( "Poultry Produce" == $product->category ) ? 'selected' : '' }} >Poultry Produce</option>
+                                    <option value="Dairy Produce" {{ ( "Dairy Produce" == $product->category ) ? 'selected' : '' }}>Dairy Produce</option>
+                                    <option value="Fruits" {{ ( "Fruits" == $product->category ) ? 'selected' : '' }}>Fruits</option>
+                                    <option value="Legumes" {{ ( "Legumes" == $product->category ) ? 'selected' : '' }}>Legumes</option>
+                                    <option value="Aquatic Produce" {{ ( "Aquatic Produce" == $product->category ) ? 'selected' : '' }}>Aquatic Produce</option>
+                                    <option value="Beef" {{ ( "Beef" == $product->category ) ? 'selected' : '' }}>Beef</option>
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -46,12 +47,12 @@
                                     Quantity
                                 </label>
                                 <div class="flex flex-row gap-3">
-                                    <input class="appearance-none block w-2/5 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-quantity" type="number" name="quantity" placeholder="0">
+                                    <input class="appearance-none block w-2/5 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-quantity" type="number" name="quantity" value="{{ $product->quantity }}">
                                     <div class="inline-block relative w-2/5 my-1">
                                         <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="qty_unit" id="grid-qty-unit">
-                                            <option value="kg">KG(s)</option>
-                                            <option value="liter">Liter(s)</option>
-                                            <option value="unit">Unit(s)</option>
+                                            <option value="kg" {{ ( "kg" == $product->unit ) ? 'selected' : '' }} >KG(s)</option>
+                                            <option value="liter" {{ ( "liter" == $product->unit ) ? 'selected' : '' }} >Liter(s)</option>
+                                            <option value="unit" {{ ( "unit" == $product->unit ) ? 'selected' : '' }} >Unit(s)</option>
                                         </select>
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 pb-3 text-gray-700">
                                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -66,13 +67,13 @@
                                     Price
                                 </label>
                                 <div class="flex flex-row gap-3">
-                                    <input class="appearance-none block w-2/5 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-quantity" type="number" name="price" placeholder="0">
+                                    <input class="appearance-none block w-2/5 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-quantity" type="number" name="price" value="{{ $product->price }}">
                                     <p class="py-2">per</p>
                                     <div class="inline-block relative w-2/5 my-1">
                                         <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="qty_price_per_unit" id="grid-qty-price">
-                                            <option value="kg">KG(s)</option>
-                                            <option value="liter">Liter(s)</option>
-                                            <option value="unit">Unit(s)</option>
+                                            <option value="kg" {{ ( "kg" == $product->unit ) ? 'selected' : '' }} >KG(s)</option>
+                                            <option value="liter" {{ ( "liter" == $product->unit ) ? 'selected' : '' }} >Liter(s)</option>
+                                            <option value="unit" {{ ( "unit" == $product->unit ) ? 'selected' : '' }} >Unit(s)</option>
                                         </select>
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 pb-3 text-gray-700">
                                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -83,7 +84,7 @@
                         </div>
                     </div>
                     <div class="flex flex-col flex-wrap w-full mx-auto">
-                        <div class="w-full">
+                        <div class="w-2/3 mx-auto">
                             <div class="border-dotted border-4 border-red-500">
                                 <main class="container mx-auto max-w-screen-lg h-full">
                                     <!-- file upload modal -->
@@ -111,7 +112,7 @@
                                             </header>
 
                                             <h1 class="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
-                                                To Upload
+                                                Add or Remove Images
                                             </h1>
 
                                             <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
@@ -125,7 +126,7 @@
                                         <!-- sticky footer -->
                                         <footer class="flex justify-end px-8 pb-8 pt-4">
                                             <button id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-                                            Cancel
+                                                Cancel
                                             </button>
                                         </footer>
                                     </article>
@@ -192,17 +193,14 @@
                     <!-- sticky footer -->
                     <footer class="flex justify-center px-8 pb-8 pt-4 mt-4">
                         <button id="submit" class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
-                            Add Product
+                            Save
                         </button>
                     </footer>
                 </form>
-                
+
+                <livewire:edit-image-template :product="$product" :loc="$loc" />                
 
                 <script>
-
-                    // click the hidden input of type file if the visible button is clicked
-                    // and capture the selected files
-                    const hidden = document.getElementById("hidden-input");
                     const fileTempl = document.getElementById("file-template"),
                     imageTempl = document.getElementById("image-template"),
                     empty = document.getElementById("empty");
@@ -240,12 +238,14 @@
                         target.prepend(clone);
 
                         FILES[objectURL] = file;
-                        console.log(FILES);
-                        console.log(hidden.files);
                     }
 
                     const gallery = document.getElementById("gallery"),
                     overlay = document.getElementById("overlay");
+
+                    // click the hidden input of type file if the visible button is clicked
+                    // and capture the selected files
+                    const hidden = document.getElementById("hidden-input");
 
                     document.getElementById("button").onclick = (e) => {
                         e.preventDefault();
@@ -274,7 +274,6 @@
                         ev.preventDefault();
                         for (const file of ev.dataTransfer.files) {
                             addFile(gallery, file);
-
                             overlay.classList.remove("draggedover");
                             counter = 0;
                         }

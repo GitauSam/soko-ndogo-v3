@@ -9,6 +9,7 @@ use App\Models\Products\ProductImages;
 use App\Models\Products\Repository\ProductRepository;
 use App\Modules\Products\ProductActivator;
 use App\Http\Requests\StoreProduct;
+use App\Http\Requests\UpdateProductDetails;
 use App\Exception;
 use App\Exceptions\CreateProductException;
 use App\Exceptions\FetchProductException;
@@ -95,7 +96,15 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $productActivator = new ProductActivator(new Product());
+            $product = $productActivator->returnProductById($id);
+
+            return view('products.edit', ['product' => $product, 
+                'loc' => 'storage/photos/products/thumbnails/']);
+        } catch (Exception $e) {
+            // add logic to handle exception here
+        }
     }
 
     /**
@@ -105,9 +114,17 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProductDetails $request, $id)
     {
-        //
+        // dd($request);
+        try {
+            $productActivator = new ProductActivator();
+            $productActivator->editProduct($request, $id);
+
+            return redirect()->route('products.index')->with('success','Product updated successfully');
+        } catch (Exception $e) {
+            // add logic to handle exception here
+        }
     }
 
     /**

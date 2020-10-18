@@ -62,6 +62,30 @@ class ProductRepository
         }
     }
 
+    public function updateProduct($data, $id) {
+        try {
+            $product = $this->fetchProductById($id);
+            $product->product_name = $data->product_name;
+            $product->quantity = $data->quantity;
+            $product->unit = $data->qty_unit;
+            $product->price = $data->price;
+            $product->category = $data->category;
+
+            $product->save();
+
+            $productImagesActivator = new ProductImagesActivator(new ProductImages());
+
+            foreach($data->photos as $photo) {
+                $productImagesActivator->addProductImage($product->id, $photo);
+            }
+
+        } catch(QueryException $e) {
+            throw new EditProductException($e);
+        } catch(Exception $e) {
+            throw new EditProductException($e);
+        }
+    }
+
     public function deactivateProduct($id) {
         try {
             $product = $this->fetchProductById($id);

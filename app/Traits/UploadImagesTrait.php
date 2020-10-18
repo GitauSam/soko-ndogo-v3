@@ -15,8 +15,8 @@ trait UploadImagesTrait {
 
     function uploadProductImages($image) {
         $storageLocnsArray = [];
-        $filenameThumbnail = "thumbnail-"  . time() . "."  . $image->getClientOriginalExtension();
-        $filenameFullSize = "fullsize-" . time() . "."  . $image->getClientOriginalExtension();
+        $filenameThumbnail = "thumbnail-"  . time() . "-" . bin2hex(openssl_random_pseudo_bytes(16)) . "."  . $image->getClientOriginalExtension();
+        $filenameFullSize = "fullsize-" . time() . "-" . bin2hex(openssl_random_pseudo_bytes(16)) . "."  . $image->getClientOriginalExtension();
         $thumbnail_storage_path = "app/" . $this->getThumbnailProductStorageLocation() . $filenameThumbnail;
         $fullsize_storage_path = "app/" . $this->getFullSizeProductImageStorageLocation() . $filenameFullSize;
         $image->storeAs($this->getThumbnailProductStorageLocation(), $filenameThumbnail);

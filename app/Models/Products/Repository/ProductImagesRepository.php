@@ -8,6 +8,7 @@ use App\Exception;
 use Illuminate\Database\QueryException;
 use App\Exceptions\CreateProductException;
 use App\Exceptions\CreateProductImageException;
+use App\Exceptions\DeactivateProductImageException;
 // use App\Exceptions\EditProductImageException;
 // use App\Exceptions\FetchProductImagesException;
 
@@ -17,7 +18,6 @@ class ProductImagesRepository
         $this->model = $productImage;
     }
 
-    
     public function createProductImage($prodId, $photo, $url, $is_thumbnail, $saved_image_name) {
         try {
             return $this->model->create(array(
@@ -31,6 +31,16 @@ class ProductImagesRepository
             ));
         } catch (QueryException $e) {
             throw new CreateProductImageException($e);
+        }
+    }
+
+    public function deactivateProductImage($imgName) {
+        dd($imgName);
+        try {
+            $productImage = ProductImages::where('image_name', $imgName)->get();
+            dd($productImage);
+        } catch (QueryException $e) {
+            throw new DeactivateProductImageException($e);
         }
     }
 }
