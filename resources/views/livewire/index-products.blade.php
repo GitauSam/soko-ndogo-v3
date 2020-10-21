@@ -3,7 +3,7 @@
 		<table class="w-full flex mx-auto flex-row flex-no-wrap sm:bg-white rounded-sm overflow-hidden sm:shadow-lg my-5">
 			<thead class="text-white">
                 @foreach ($products as $product)
-				    <x-product-index-table-head/>
+				          <x-product-index-table-head/>
                 @endforeach
 			</thead>
 			<tbody class="flex-1 sm:flex-none">

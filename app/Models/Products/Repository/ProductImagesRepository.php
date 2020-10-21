@@ -34,11 +34,11 @@ class ProductImagesRepository
         }
     }
 
-    public function deactivateProductImage($imgName) {
-        dd($imgName);
+    public function deactivateProductImage($imgName, $prodId) {
         try {
-            $productImage = ProductImages::where('image_name', $imgName)->get();
-            dd($productImage);
+            $productImages = ProductImages::where('product_id', $prodId)
+            ->where('image_name', $imgName)
+            ->update(['status' => 0]);
         } catch (QueryException $e) {
             throw new DeactivateProductImageException($e);
         }

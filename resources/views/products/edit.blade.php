@@ -1,3 +1,4 @@
+{{-- dd($product->productImages) --}}
 <x-app-layout>
     <div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col mt-4 py-4">
 

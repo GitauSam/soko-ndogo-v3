@@ -37,9 +37,8 @@ class ProductImagesActivator {
         
     }
 
-    public function deactivateProductImage() {
-        dd("here");
-        $this->modelRepository->deactivateProductImage($imgName);
+    public function deactivateProductImage($imgName, $prod_id) {
+        $this->modelRepository->deactivateProductImage($imgName, $prod_id);
     }
 
 }
