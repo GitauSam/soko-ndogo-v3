@@ -5,11 +5,13 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Modules\Products\ProductActivator;
 use App\Exceptions\FetchProductException;
+use App\Models\Products\Product;
+use Livewire\WithPagination;
 
 class IndexProducts extends Component
 {
 
-    public $products = [];    
+    use WithPagination;
 
     public function deactivateProduct($id) {
         try {
@@ -28,10 +30,11 @@ class IndexProducts extends Component
     {
         try {
             $productActivator = new ProductActivator();
-            $this->products = $productActivator->returnAllUserProducts();
+            $products = $productActivator
+                                ->returnAllUserProducts()
+                                ->paginate(10);
 
-            return view('livewire.index-products');
-                // ->with('i', (request()->input('page', 1) - 1) * 5);              
+            return view('livewire.index-products', ['products' => $products]); 
         } catch(FetchProductException $e) {
             // add logic to handle exception here
         }

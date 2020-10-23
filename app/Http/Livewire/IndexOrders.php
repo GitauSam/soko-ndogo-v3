@@ -7,10 +7,11 @@ use App\Modules\Orders\OrderActivator;
 use App\Exceptions\DeactivateOrderException;
 use App\Exceptions\EditOrderException;
 use App\Exceptions\FetchOrderException;
+use Livewire\WithPagination;
 
 class IndexOrders extends Component
 {
-    public $orders = [];    
+    use WithPagination;    
 
     public function deactivateOrder($id) {
         try {
@@ -29,10 +30,11 @@ class IndexOrders extends Component
     {
         try {
             $orderActivator = new OrderActivator();
-            $this->orders = $orderActivator->returnAllUserOrders();
+            $orders = $orderActivator
+                        ->returnAllUserOrders()
+                        ->paginate(10);
 
-            return view('livewire.index-orders');
-                // ->with('i', (request()->input('page', 1) - 1) * 5);              
+            return view('livewire.index-orders', ["orders" => $orders]);        
         } catch(FetchOrderException $e) {
             // add logic to handle exception here
         }

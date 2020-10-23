@@ -37,7 +37,7 @@ class OrderRepository
         } 
     }
 
-    public function fetchProductById($id) {
+    public function fetchOrderById($id) {
         try {
             return Orders::findOrFail($id);
         } catch(QueryException $e) {
@@ -49,15 +49,13 @@ class OrderRepository
         try {
             return Orders::
                 where([['buyer_id', auth()->user()->id], ['status', 1]])
-                ->latest()
-                ->get();
-                // ->paginate(5);
+                ->latest();
         } catch(QueryException $e) {
-            throw new FetchProductException($e);
+            throw new FetchOrderException($e);
         }
     }
 
-    public function updateProduct($data, $id) {
+    public function updateOrder($data, $id) {
         // try {
         //     $product = $this->fetchProductById($id);
         //     $product->product_name = $data->product_name;

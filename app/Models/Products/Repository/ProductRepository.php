@@ -54,9 +54,7 @@ class ProductRepository
         try {
             return Product::
                 where([['seller_id', auth()->user()->id], ['status', 1]])
-                ->latest()
-                ->get();
-                // ->paginate(5);
+                ->latest();
         } catch(QueryException $e) {
             throw new FetchProductException($e);
         }

@@ -4,12 +4,14 @@
             Category
         </label>
         <div class="inline-block relative w-2/3 my-1">
-            <select wire:model="defaultCategoryTypesDisplayed"
-                class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="category" id="grid-category-name">
+            <select 
+                class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" 
+                name="category" 
+                id="grid-category-name">
+                <option selected="selected" disabled>-- Select Category --</option>
                 @foreach($categories as $category)
-                    <option value="$category->id"
-                        {{ ($category->id == 3)  ? 'selected' : '' }}>
-                        {{ $category->id }}
+                    <option value="{{ $category->id }}">
+                        {{ $category->category_name }}
                     </option>
                 @endforeach
             </select>
@@ -27,11 +29,10 @@
                 <div class="inline-block relative w-2/5 my-1">
                     <select
                         class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="type" id="grid-type">
+                        <option selected disabled>-- Select Type --</option>
                         @foreach($categoryTypes as $categoryType)
-                            <option 
-                                value="{{ $categoryType->id}}"
-                                {{ ($categoryType->id == $order->categoryType->id)  ? 'selected' : '' }}>
-                                    {{ $order->categoryType->category_type_name}}
+                            <option value="{{ $categoryType->id}}">
+                                    {{ $categoryType->category_type_name}}
                             </option>
                         @endforeach
                     </select>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateOrder;
 use App\Modules\Orders\OrderActivator;
 use App\Exceptions\FetchOrderException;
+use App\Notifications\OrderCreated;
 
 class OrderController extends Controller
 {
@@ -19,9 +20,7 @@ class OrderController extends Controller
     {
         try {
             $notifications = auth()->user()->unreadNotifications;
-            
-            return view('orders.index', ['notifications' => $notifications]);
-                // ->with('i', (request()->input('page', 1) - 1) * 5);              
+            return view('orders.index', ['notifications' => $notifications]);          
         } catch(FetchOrderException $e) {
             // add logic to handle exception here
         }
@@ -49,6 +48,10 @@ class OrderController extends Controller
         try {
             $orderActivator = new OrderActivator();
             $orderActivator->addOrder($request);
+
+            auth()->user()->notify(new OrderCreated());
+
+            return redirect()->route('orders.index');
         } catch (Exception $e) {
             // add logic to handle excpetion here
         }

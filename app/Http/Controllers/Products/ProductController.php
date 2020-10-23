@@ -27,9 +27,7 @@ class ProductController extends Controller
         
         try {
             $notifications = auth()->user()->unreadNotifications;
-            
-            return view('products.index', ['notifications' => $notifications]);
-                // ->with('i', (request()->input('page', 1) - 1) * 5);              
+            return view('products.index', ['notifications' => $notifications]);            
         } catch(FetchProductException $e) {
             // add logic to handle exception here
         }
@@ -60,7 +58,7 @@ class ProductController extends Controller
 
             auth()->user()->notify(new ProductCreated());
 
-            return redirect()->route('products.index')->with('success','Product created successfully');
+            return redirect()->route('products.index');
         } catch (CreateProductException $e) {
             // add logic to handle create product exception here
         } catch (Exception $e) {
