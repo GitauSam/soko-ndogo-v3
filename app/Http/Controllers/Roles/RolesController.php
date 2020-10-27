@@ -6,6 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\UpdateRole;
+use App\Http\Requests\CreateRole;
+use App\Modules\Roles\RoleActivator;
+use App\Exception;
+use App\Exceptions\CreateRoleException;
+use App\Exceptions\RoleNotFoundException;
+use App\Exceptions\RoleUpdateUnsuccessfulException;
 use DB;
 
 class RolesController extends Controller
@@ -13,11 +20,11 @@ class RolesController extends Controller
 
     function __construct() 
     {
-        // $this->middleware('permission: role-list|role-create|role-edit|role-delete', 
-        // ['only' => ['index', 'store']]);
-        $this->middleware('permission: role-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission: role-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission: role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:role-list|role-create|role-edit|role-delete', 
+        ['only' => ['index']]);
+        $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -60,20 +67,24 @@ class RolesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateRole $request)
     {
-        //
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
-        
-        $role = Role::create(['name' => $request->input('name')]);        
-        $role->syncPermissions($request->input('permission'));
-        
-        return redirect()
+
+        try {
+            $roleActivator = new RoleActivator();
+            $roleActivator->addRole($request);
+
+            return redirect()
                     ->route('roles.index')
                     ->with('success','Role created successfully');
+        } catch (CreateRoleException $e) {
+            return redirect()->route('roles.index')
+                ->with('unsuccessful','Role was not created successfully');
+        } catch (Exception $e) {
+            return redirect()->route('roles.index')
+                ->with('unsuccessful','Role was not created successfully');
+        }
+        
     }
 
     /**
@@ -102,14 +113,9 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        //
+        
         $role = Role::find($id);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")
-                            ->where("role_has_permissions.role_id",$id)
-                            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-                            ->all();
-        return view('roles.edit',compact('role','permission','rolePermissions'));
+        return view('roles.edit',compact('role'));
     }
 
     /**
@@ -119,20 +125,25 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRole $request, $id)
     {
-        //
-        $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
         
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->save();
-        $role->syncPermissions($request->input('permission'));
-        return redirect()->route('roles.index')
-            ->with('success','Role updated successfully');
+        try {
+            $roleActivator = new RoleActivator();
+            $roleActivator->editRole($request, $id);
+
+            return redirect()->route('roles.index')
+                ->with('success','Role updated successfully');
+        } catch (RoleNotFoundException $e) {
+            return redirect()->route('roles.index')
+                ->with('unsuccessful','Role was not found');
+        } catch (RoleUpdateUnsuccessfulException $e) {
+            return redirect()->route('roles.edit', $role->id)
+                ->with('unsuccessful','Role was not updated successfully');
+        } catch (Exception $e) {
+            return redirect()->route('roles.edit', $role->id)
+                ->with('unsuccessful','Role was not updated successfully');
+        }
     }
 
     /**
@@ -143,10 +154,10 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        //
-        // DB::table("roles")
-        //     ->where('id',$id)
-        //     ->delete();
+        
+        DB::table("roles")
+            ->where('id',$id)
+            ->delete();
         
         return redirect()
                     ->route('roles.index')

@@ -19,8 +19,13 @@ class OrderCategoryAndTypeEdit extends Component
 
     public function render()
     {
+
         if ($this->categoryTypesIndexBuffer == null) {
-            $this->categoryTypesIndex = $this->order->categoryType->category_id;
+            if($this->order->categoryType != null) {
+                $this->categoryTypesIndex = $this->order->categoryType->category_id;
+            } else {
+                $this->categoryTypesIndex = 0;
+            }
         } else {
             $this->categoryTypesIndex = $this->categoryTypesIndexBuffer;
         }

@@ -105,7 +105,7 @@
                           </span>
                       </td>
                       <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <a class="w-16 text-center rounded-sm px-3 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('orders.show', $order->id) }}">Show</a>
+                          <a class="py w-16 text-center rounded-sm px-3 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('orders.show', $order->id) }}">Show</a>
                           <a class="w-16 text-center rounded-sm px-3 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="{{ route('orders.edit', $order->id) }}">Edit</a>
                           <button wire:click="deactivateProduct('{{ $order->id }}')" class="w-16 text-center rounded-sm px-3 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</button>
                       </td>

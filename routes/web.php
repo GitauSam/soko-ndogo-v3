@@ -5,6 +5,7 @@ use App\Http\Controllers\Roles\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Orders\OrderController;
+use App\Http\Controllers\Roles\RoleManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,15 +20,18 @@ use App\Http\Controllers\Orders\OrderController;
 
 // Auth::routes();
 
-Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
-    Route::resource('roles', RolesController::class);
+Route::group(['middleware' => ['auth:web', 'verified']], function() {
+        Route::resource('roles', RolesController::class);
+        Route::resource('products', ProductController::class);
+        Route::resource('orders', OrderController::class);
 });
-
-Route::resource('products', ProductController::class);
-Route::resource('orders', OrderController::class);
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/manage', function () {
+    return 'Hello World';
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

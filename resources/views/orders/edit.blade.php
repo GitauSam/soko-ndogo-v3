@@ -1,5 +1,5 @@
 <x-app-layout>
-<div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col mt-4 py-4">
+<div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col my-36 py-4">
 
     <div class="px-7 flex flex-inline justify-center">
         <h2 class="text-4xl font-semibold">Edit Order</h2>

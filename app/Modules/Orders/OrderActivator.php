@@ -17,7 +17,7 @@ class OrderActivator
     }
 
     public function returnOrderById($id) {
-        return $this->modelRepository->fetchProductById($id);
+        return $this->modelRepository->fetchOrderById($id);
     }
 
     public function returnAllUserOrders() {

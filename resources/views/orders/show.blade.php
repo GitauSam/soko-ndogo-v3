@@ -1,6 +1,5 @@
-{{-- dump($product) --}}
 <x-app-layout>
-    <div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col mt-4 py-4">
+    <div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col my-36 py-4">
 
         <div class="px-7 flex flex-inline justify-center">
             <h2 class="text-4xl font-semibold">Show Order</h2>
@@ -32,7 +31,11 @@
                         <tr class="bg-gray-100">
                             <td class="border-b-2 px-4 py-2">Category Type:</td>
                             <td class="border-l-2 border-b-2 px-4 py-2">
-                                <span> {{ $order->categoryType->category_type_name }}</span>
+                                @if($order->categoryType != null) 
+                                    <span> {{ $order->categoryType->category_type_name }}</span>
+                                @else
+                                    <span>N/A</span>
+                                @endif
                             </td>
                         </tr>
                         <tr>
