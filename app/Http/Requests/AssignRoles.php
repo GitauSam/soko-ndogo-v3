@@ -25,8 +25,8 @@ class AssignRoles extends FormRequest
     {
         return [
             //
-            'user'=>'required|integer',
-            'roles.*'=>'required'
+            'user_id'=>'required|integer',
+            'roles'=>'required',
         ];
     }
 }

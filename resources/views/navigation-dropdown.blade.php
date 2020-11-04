@@ -1,22 +1,21 @@
 @guest
-<nav x-data="{ open: false }" class="fixed w-full z-40 shadow-xl bg-green-800">
+    <nav x-data="{ open: false }" class="fixed w-full h-24 z-5 shadow-lg bg-green-800">
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex justify-between h-full">
                 <div class="flex">
                     <!-- Logo -->
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="{{ route('dashboard') }}">
+                    <!-- <div class="flex-shrink-0 flex items-center"> -->
+                        <!-- <a href="{{ route('dashboard') }}">
                             <x-jet-application-mark class="block h-9 w-auto" />
-                        </a>
-                    </div>
+                        </a> -->
+                    <!-- </div> -->
 
                     <!-- Navigation Links -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <div class="sm:-my-px flex">
                         <x-jet-nav-link 
-                            href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
-                            class="text-white">
-                            {{ __('Soko Ndogo') }}
+                            href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                            <span class="text-lg font-semibold text-gray-300 hover:text-white">Soko Ndogo</span>
                         </x-jet-nav-link>
                     </div>
                 </div>
@@ -25,8 +24,8 @@
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                    <div>Enter</div>
+                            <button class="flex items-center text-md font-medium text-gray-500 hover:text-white hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                    <div class="font-semibold">Enter</div>
 
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -36,11 +35,11 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                        <x-jet-dropdown-link href="{{ route('login') }}">
-                                {{ __('Sign In') }}
+                            <x-jet-dropdown-link href="{{ route('login') }}">
+                                    {{ __('Sign In') }}
                             </x-jet-dropdown-link>
-                        <x-jet-dropdown-link href="{{ route('register') }}">
-                                {{ __('Sign Up') }}
+                            <x-jet-dropdown-link href="{{ route('register') }}">
+                                    {{ __('Sign Up') }}
                             </x-jet-dropdown-link>
                         </x-slot>
                     </x-jet-dropdown>
@@ -59,42 +58,41 @@
         </div>
 
         <!-- Responsive Navigation Menu -->
-        <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-gray-200">
             <div class="pt-2 pb-3 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
+                <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
+                    {{ __('Login') }}
                 </x-jet-responsive-nav-link>
             </div>
 
             <!-- Responsive Settings Options -->
-            <div class="pt-4 pb-1 border-t border-gray-200">
+            <!-- <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="flex items-center px-4">
                 </div>
 
                 <div class="mt-3 space-y-1">
                 </div>
-            </div>
+            </div> -->
         </div>
     </nav>
 @else
-    <nav x-data="{ open: false }" class="fixed w-full z-40 shadow-xl bg-green-800">
+    <nav x-data="{ open: false }" class="fixed w-full h-24 z-40 shadow bg-green-800">
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex justify-between h-full">
                 <div class="flex">
                     <!-- Logo -->
-                    <div class="flex-shrink-0 flex items-center">
+                    <!-- <div class="flex-shrink-0 flex items-center">
                         <a href="{{ route('dashboard') }}">
                             <x-jet-application-mark class="block h-9 w-auto" />
                         </a>
-                    </div>
+                    </div> -->
 
                     <!-- Navigation Links -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <div class="sm:-my-px flex">
                         <x-jet-nav-link 
-                            href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')"
-                            class="text-white">
-                            {{ __('Soko Ndogo') }}
+                            href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                            <span class="text-lg font-semibold text-gray-300 hover:text-white">Soko Ndogo</span>
                         </x-jet-nav-link>
                     </div>
                 </div>
@@ -200,7 +198,7 @@
         </div>
 
         <!-- Responsive Navigation Menu -->
-        <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-gray-200">
             <div class="pt-2 pb-3 space-y-1">
                 <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}

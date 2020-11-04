@@ -1,8 +1,8 @@
 <x-app-layout>
-    <div class="container bg-white border-solid border-2 border-gray-300 rounded-sm shadow mx-auto flex flex-col my-24 py-4">
+    <div class="container border-solid border-2 border-gray-300 rounded-lg shadow mx-auto flex flex-col py-4 mt-24 mb-4 mx-4">
 
-        <div class="px-7 flex flex-inline justify-center">
-            <h2 class="text-4xl font-semibold">Show Product</h2>
+        <div>
+        <h2 class="text-2xl px-2 font-semibold leading-tight">Show Product</h2>
         </div>
                     
         <div class="container mx-auto flex flex-col py-4">
@@ -59,7 +59,7 @@
                 @endforeach
             </div>
             <div class="flex flex-row w-2/3 my-8 mx-auto justify-end px-4">
-                <a href="#" class="ml-4 rounded-sm px-3 py-1 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none">Update</a>
+                <a href="{{ route('products.edit', $product->id) }}" class="ml-4 rounded-sm px-3 py-1 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none">Update</a>
                 <a href="#" class="ml-4 rounded-sm px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</a>
             </div>
         </div>

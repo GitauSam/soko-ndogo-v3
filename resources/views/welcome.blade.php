@@ -1,27 +1,44 @@
 <x-app-layout>
     <div class="bg-white font-sans leading-normal tracking-normal antialiased">
-        <!--- First Image -->
-        <section class="text-black">
-            <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
-                <div class="text-center lg:w-2/3 w-full">
-                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium	 text-black font-mono">
-                        Soko Ndogo. </h1>
-                    <p class="leading-relaxed mb-8 font-normal">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Et soluta consequuntur at. 
-                        Vitae nostrum iusto nam! Reiciendis quidem, consequatur culpa omnis nobis corporis. 
-                        Nostrum incidunt officia maiores impedit in voluptate, nam eligendi cumque enim itaque 
-                        maxime placeat animi dicta consequatur, ab minus perferendis quibusdam ratione reiciendis. 
-                        Nisi, beatae. Natus, suscipit?
-                    </p>
-                    <div class="flex justify-center">
-                        <button
-                            class="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-gray-900 hover:text-pink-500 transition ease-in-out duration-700">
-                                Lorem, ipsum.
-                            </button>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!--- Welcome Section -->
+        @guest          
+            <x-introduce-service-section>
+                <x-slot name="title">
+                    Welcome,
+                </x-slot>
+                <p class="leading-relaxed mb-8 font-normal">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                    Nesciunt quae facilis tempora corporis culpa, rerum nemo sunt, 
+                    beatae consectetur temporibus, eum error. 
+                    Aperiam eveniet provident enim vero corrupti. 
+                    Distinctio harum voluptatum repellat officia saepe hic corrupti, 
+                    at, incidunt laborum, tempore nisi necessitatibus aspernatur 
+                    exercitationem fugit ex voluptas. Fugit, dolores reprehenderit.
+                </p>
+                <x-slot name="action">
+                    <a href="{{ route('login') }}">Login</a>
+                </x-slot>
+            </x-introduce-service-section>
+        @else
+            <x-introduce-service-section>
+                <x-slot name="title">
+                    Welcome to Soko Ndogo,
+                </x-slot>
+                <p class="leading-relaxed mb-8 font-normal">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                    Nesciunt quae facilis tempora corporis culpa, rerum nemo sunt, 
+                    beatae consectetur temporibus, eum error. 
+                    Aperiam eveniet provident enim vero corrupti. 
+                    Distinctio harum voluptatum repellat officia saepe hic corrupti, 
+                    at, incidunt laborum, tempore nisi necessitatibus aspernatur 
+                    exercitationem fugit ex voluptas. Fugit, dolores reprehenderit.
+                </p>
+                <x-slot name="action">
+                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                </x-slot>
+            </x-introduce-service-section>
+        @endguest
+
         <!--- First Image -->
         <section class="">
             <div class="container mx-auto flex px-10 py-8 items-center justify-center flex-col">
@@ -185,7 +202,7 @@
         <section class="text-black">
             <div class="container px-5 py-24 mx-auto">
                 <div class="flex flex-col text-center w-full mb-20">
-                    <h1 class="text-2xl font-medium title-font mb-4 text-black">Lorem, ipsum dolor</h1>
+                    <h1 class="text-2xl font-medium title-font mb-4 text-black">Meet the team</h1>
                     <p class="lg:w-2/3 mx-auto leading-relaxed">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae odit suscipit placeat ex, 
                         at saepe pariatur illum soluta blanditiis ab velit commodi tenetur omnis facere deleniti! 

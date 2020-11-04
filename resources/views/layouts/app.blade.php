@@ -86,6 +86,9 @@
                             class="text-sm text-gray-600 font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
                             © Soko Ndogo
                         </span>
+                        <span
+                            class="text-sm text-gray-600 font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+                        </span>
                     </div>
                 </div>
             </footer>

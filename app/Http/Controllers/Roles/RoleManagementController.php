@@ -9,6 +9,8 @@ use App\Exceptions\UnableToAssignRoleException;
 use App\Modules\Roles\RoleManagementActivator;
 use App\Modules\Roles\RoleActivator;
 use App\Exceptions\FetchRolesException;
+use App\Modules\Users\UserActivator;
+use Spatie\Permission\Models\Role;
 
 class RoleManagementController extends Controller
 {
@@ -21,15 +23,15 @@ class RoleManagementController extends Controller
         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
     }
 
-    public function getAssignRole($id) {
-        dd($id);
+    public function getAssignRoles($id) {
         try {
             $userActivator = new UserActivator();
             $user = $userActivator->returnUser($id);
             $roleActivator = new RoleActivator();
             $roles = $roleActivator->returnAllRoles();
+            $userRoles = $user->getRoleNames();
 
-            return view('roles.assign', ['user'=>$user, 'roles'=>$roles]);
+            return view('roles.assign', ['user'=>$user, 'roles'=>$roles, 'userRoles'=>$userRoles]);
         } catch (ModelNotFoundException $e) {
             abort();
         } catch (FetchRolesException $e) {
@@ -39,14 +41,18 @@ class RoleManagementController extends Controller
         }
     }
 
-    public function assignRole(AssignRoles $request) {
+    public function assignRoles(AssignRoles $request) {
+
         try {
-            $roleManagementActivator = new RoleManagementActivator($request->user_id);
-            $roleManagementActivator->assignRole($request->roles);
-            return redirect()
-                ->route('users.show', 
-                    ['id'=>$request->user_id])
-                ->with('assign-role-success', 'Assigned role successfully');
+            if ($request->roles){
+                $roleManagementActivator = new RoleManagementActivator();
+                $roleManagementActivator->assignRole($request->user_id, $request->roles);
+                return redirect()
+                    ->route('users.show', $request->user_id)
+                    ->with('assign-role-success', 'Assigned role successfully');
+            } else {
+                throw new UnableToAssignRoleException("No roles to assign");
+            }
         } catch (ModelNotFoundException $e) {
             abort();
         } catch (UnableToAssignRoleException $e) {

@@ -7,19 +7,19 @@ use App\Models\Roles\Repository\RoleRepository;
 class RoleActivator {
 
     public function __construct() {
-        $this->roleRepository = new RoleRepository();
+        return $this->roleRepository = new RoleRepository();
     }
 
     public function addRole($request) {
-        $this->roleRepository->createRole($request);
+        return $this->roleRepository->createRole($request);
     }
 
     public function editRole($request, $id) {
-        $this->roleRepository->updateRole($request, $id);
+        return $this->roleRepository->updateRole($request, $id);
     }
 
     public function returnAllRoles() {
-        $this->roleRepository->fetchAllRoles();
+        return $this->roleRepository->fetchAllRoles();
     }
 }
 ?>

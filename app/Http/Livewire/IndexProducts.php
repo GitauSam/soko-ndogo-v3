@@ -32,7 +32,7 @@ class IndexProducts extends Component
             $productActivator = new ProductActivator();
             $products = $productActivator
                                 ->returnAllUserProducts()
-                                ->paginate(10);
+                                ->paginate(5);
 
             return view('livewire.index-products', ['products' => $products]); 
         } catch(FetchProductException $e) {

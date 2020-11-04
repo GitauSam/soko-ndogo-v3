@@ -12,7 +12,10 @@ class RoleManagementActivator {
         try {
             $userActivator = new UserActivator();
             $user = $userActivator->returnUser($user_id);
-            $user->assignRole($roles);
+            foreach($roles as $key => $role) {
+                $user->assignRole($role);
+            }
+            
         } catch (Exception $e) {
             throw new UnableToAssignRoleException($e);
         }
