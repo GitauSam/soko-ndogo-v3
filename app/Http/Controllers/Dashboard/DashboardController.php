@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\Products\ProductActivator;
 use App\Models\Products\Product;
+use App\Modules\Orders\OrderActivator;
+use App\Models\Orders\Orders;
+
 class DashboardController extends Controller
 {
     //
@@ -18,24 +21,72 @@ class DashboardController extends Controller
 
     public function getDashboard() {
         try {
-            $productActivator = new ProductActivator();
+            
+            /**
+             * Declare variables to hold count of items to be displayed on dashboard
+             * depending on user type
+             */
+            $totalProductsCount = 0;
+            $purchasedProductsCount = 0;
+            $nonPurchasedProductsCount = 0;
+
+            $totalOrdersCount = 0;
+            $servicedOrdersCount = 0;
+            $nonServicedOrdersCount = 0;
 
             if (auth()->user()->hasRole('Seller')) {
+                /**
+                 * If role == Seller
+                 * Get product statistics
+                 */
+                $productActivator = new ProductActivator();
                 $totalProducts = $productActivator->returnAllUserProducts()->paginate();
-                $purchasedProducts = 0;
-                $nonPurchasedProducts = 0;
+                $totalProductsCount = count($totalProducts);
                 foreach($totalProducts as $product) {
                     if ($product->purchased == false) {
-                        $nonPurchasedProducts++;
+                        $nonPurchasedProductsCount++;
                     } else {
-                        $purchasedProducts++;
+                        $purchasedProductsCount++;
                     }
                 }
-                dump("total products: " . count($totalProducts));
-                dump("purchased products: " . $purchasedProducts);
-                dump("non-purchased products: " . $nonPurchasedProducts);
+
+                // dump("total products: " . count($totalProductsCount));
+                // dump("purchased products: " . $purchasedProductsCount);
+                // dump("non-purchased products: " . $nonPurchasedProductsCount);
+
+                return view('dashboard', 
+                            ["totalItems" => ["Total Products" => $totalProductsCount],
+                            "servicedItems" => ["Sold Products" => $purchasedProductsCount],
+                            "nonServicedItems" => ["Non-Serviced Products" => $nonPurchasedProductsCount]
+                            ]);
             } else if (auth()->user()->hasRole('Buyer')) {
-                dd("buyer");
+                /**
+                 * If role == Buyer
+                 * Get order statistics
+                 */
+
+                $orderActivator = new OrderActivator();
+                $totalOrders = $orderActivator->returnAllUserOrders()->get();
+                $totalOrdersCount = count($totalOrders);
+                
+                foreach($totalOrders as $order) {
+                    if ($order->serviced == false) {
+                        $nonServicedOrdersCount++;
+                    } else {
+                        $servicedOrdersCount++;
+                    }
+                }
+
+                // dump("servicedOrdersCount " . $servicedOrdersCount);
+                // dump("nonServicedOrdersCount" . $nonServicedOrdersCount);
+                // dd("totalOrdersCount " . $totalOrdersCount);
+
+                return view('dashboard', 
+                            ["totalItems" => ["Total Orders" => $totalOrdersCount],
+                            "servicedItems" => ["Serviced Orders" => $servicedOrdersCount],
+                            "nonServicedItems" => ["Non-Serviced Orders" => $nonServicedOrdersCount]
+                            ]);
+
             } else {
                 dump("Role not in checks. Shld be admin otherwise we been hacked!!!");
                 dd(auth()->user()->getRoleNames());

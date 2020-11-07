@@ -1,3 +1,6 @@
+{{-- dump(print_r($totalItems)) --}}
+{{-- dump(print_r($servicedItems)) --}}
+{{-- dd(print_r($nonServicedItems)) --}}
 <x-dashboard-app>
     <div class="mt-12">
         <x-slot name="header">
@@ -75,7 +78,7 @@
                     </nav>
                 </div>
                 <div class="flex-1 flex flex-col overflow-hidden">
-                    <header class="flex justify-between items-center py-4 px-6 bg-white border-b-4 border-indigo-600">
+                    <!-- <header class="flex justify-between items-center py-4 px-6 bg-white border-b-4 border-indigo-600">
                         <div class="flex items-center">
                             <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
                                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -181,7 +184,7 @@
                                 </div>
                             </div>
                         </div>
-                    </header>
+                    </header> -->
                     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                         <div class="container mx-auto px-6 py-8">
                             <h3 class="text-gray-700 text-3xl font-medium">Dashboard</h3>
@@ -216,8 +219,14 @@
                                             </div>
             
                                             <div class="mx-5">
-                                                <h4 class="text-2xl font-semibold text-gray-700">8,282</h4>
-                                                <div class="text-gray-500">Total Products</div>
+                                                @foreach($totalItems as $key => $value)
+                                                    <h4 class="text-2xl font-semibold text-gray-700">
+                                                        {{ $value }}
+                                                    </h4>
+                                                    <div class="text-gray-500">
+                                                        {{ $key }}
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -240,8 +249,14 @@
                                             </div>
             
                                             <div class="mx-5">
-                                                <h4 class="text-2xl font-semibold text-gray-700">200,521</h4>
-                                                <div class="text-gray-500">Total Orders</div>
+                                                @foreach($servicedItems as $key => $value)
+                                                    <h4 class="text-2xl font-semibold text-gray-700">
+                                                        {{ $value }}
+                                                    </h4>
+                                                    <div class="text-gray-500">
+                                                        {{ $key }}
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -260,8 +275,14 @@
                                             </div>
             
                                             <div class="mx-5">
-                                                <h4 class="text-2xl font-semibold text-gray-700">215,542</h4>
-                                                <div class="text-gray-500">Available Products</div>
+                                                @foreach($nonServicedItems as $key => $value)
+                                                    <h4 class="text-2xl font-semibold text-gray-700">
+                                                        {{ $value }}
+                                                    </h4>
+                                                    <div class="text-gray-500">
+                                                        {{ $key }}
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -273,7 +294,7 @@
             
                             </div>
             
-                            <div class="flex flex-col mt-8">
+                            <!-- <div class="flex flex-col mt-8">
                                 <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                                     <div
                                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
@@ -588,6 +609,52 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                            </div> -->
+                            <div class="flex flex-row flex-wrap flex-grow mt-2">
+                                <!-- display graph if user is a seller -->
+                                <div class="w-full md:w-1/2 p-3">
+                                    <!--Graph Card-->
+                                        <div class="bg-white border rounded shadow">
+                                            <div class="border-b p-3">
+                                                <h5 class="font-bold uppercase text-gray-600">Earnings</h5>
+                                            </div>
+                                            <div class="p-5">
+                                                <canvas id="chartjs-0" class="chartjs" width="undefined" height="undefined"></canvas>
+                                                <script>
+                                                    new Chart(document.getElementById("chartjs-0"), {
+                                                        "type": "line",
+                                                        "data": {
+                                                            "labels": ["January", "February", "March", 
+                                                                        "April", "May", "June", "July", 
+                                                                        "August", "September", "October",
+                                                                        "November", "December"],
+                                                            "datasets": [{
+                                                                "label": "Money earned/Month",
+                                                                "data": [65, 59, 80, 81, 56, 55, 40, 30, 40, 60, 65, 0],
+                                                                "fill": false,
+                                                                "borderColor": "rgb(75, 192, 192)",
+                                                                "lineTension": 0.1
+                                                            }]
+                                                        },
+                                                        "options": {}
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                    <!--/Graph Card-->
+                                </div>
+                                <div class="w-full md:w-1/2 p-3">
+                                    <!-- Recent Activity Card -->
+                                        <div class="bg-white border rounded shadow">
+                                            <div class="border-b p-3">
+                                                <h5 class="font-bold uppercase text-gray-600">Recent Activity</h5>
+                                            </div>
+                                            <div class="p-5">
+                                                You have no recent activities
+                                            </div>
+                                        </div>
+                                    <!-- /Recent Activity Card -->
                                 </div>
                             </div>
                         </div>
