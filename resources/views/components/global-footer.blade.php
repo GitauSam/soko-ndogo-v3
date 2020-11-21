@@ -1,10 +1,10 @@
 <!---Global Footer-->
-<footer class="text-black sm:content-center py-8 bg-green-800">
+<footer class="text-black sm:content-center py-8 px-4 bg-green-800">
     <div class="container text-center lg:px-5 lg:py-6 mx-auto flex items-center sm:flex-row flex-col">
-        <p class="text-sm text-gray-600 font-bold sm:ml-6 sm:mt-0 mt-4 uppercase">
+        <p class="text-sm text-white font-bold sm:ml-6 sm:mt-0 mt-4 uppercase">
             Soko Ndogo. Come farm, sell, and prosper with us!
         </p>
-        <p class="text-sm text-gray-600 font-bold sm:ml-6 sm:mt-0 mt-4">
+        <p class="text-sm text-white font-bold sm:ml-6 sm:mt-0 mt-4">
             <!--- Twitter -->
             <a class="" rel="noopener" href="#">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,11 +26,11 @@
                 </svg></a>
         </p>
         <span
-            class="text-sm text-gray-600 font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+            class="text-sm text-white font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
             © Soko Ndogo
         </span>
         <span
-            class="text-sm text-gray-600 font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+            class="text-sm text-white font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
         </span>
     </div>
 </footer>

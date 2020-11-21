@@ -37,7 +37,9 @@
 
             <!-- Page Content -->
             <main class>
-                {{ $slot }}
+                <div class="container mx-auto mt-16 px-4  sm:px-8 antialiased font-sans">
+                    {{ $slot }}
+                </div>
             </main>
 
             <x-global-footer />

@@ -1,11 +1,11 @@
-<div id="edit-image-template" class="mx-auto w-2/3">
-    <div class="px-7 flex flex-inline justify-center">
+<div id="edit-image-template" class="mx-auto w-full lg:px-32 pb-7">
+    <div class="p-7 flex flex-inline justify-center">
         <h4 class="text-2xl font-semibold">Uploaded Images</h2>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
         @foreach($productImages as $key => $img)
             @if($img->status ==  1 && $img->is_thumbnail == 1)
-                <li class="block p-1 w-auto h-24">
+                <li class="block p-4 w-auto">
                     <article tabindex="0" class="group hasImage w-full h-full rounded-md focus:outline-none focus:shadow-outline bg-gray-100 cursor-pointer relative text-transparent hover:text-white shadow-sm">
                         <img alt="upload preview" class="img-preview w-full h-full sticky object-cover rounded-md bg-fixed" src='{{  asset($loc . $img->saved_image_name) }}'/>
 

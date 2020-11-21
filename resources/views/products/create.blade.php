@@ -1,19 +1,30 @@
 <x-app-layout>
     <div class="container mx-auto flex flex-col mt-20 mb-12 px-4">
 
-        <div class="p-7  flex flex-inline justify-center">
+        <!-- <div class="p-7 flex flex-inline justify-center">
             <h2 class="text-4xl font-semibold">Add Product</h2>
-        </div>
-        <div class="border-2 border-gray-300 lg:rounded lg:shadow-md">
+        </div> -->
+        <x-header-section>
+            <x-slot name="title">
+                Add Product
+            </x-slot>
+            <x-slot name="action">
+                {{ route('products.index') }}
+            </x-slot>
+            <x-slot name="description">
+                Back
+            </x-slot>
+        </x-header-section>
+        <div class="bg-white border-2 border-gray-300 lg:rounded lg:shadow-md">
             <form class="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-auto mt-12" action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="flex flex-wrap -mx-3">
                     <div class="w-full md:w-1/2 lg:border-r-2 border-gray-300">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 px-3 " for="grid-product-name">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 px-3" for="grid-product-name">
                             Name
                         </label>
                         <div class="px-3">
-                            <input class="block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-product-name" name="product_name" type="text" placeholder="Product Name">
+                            <input class="bg-gray-200 focus:bg-gray-100 block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="grid-product-name" name="product_name" type="text" placeholder="Product Name">
                         </div>
                     </div>
                     <div class="w-full md:w-1/2">
@@ -49,7 +60,7 @@
                                 Quantity
                             </label>
                             <div class="flex flex-col lg:flex-row gap-3 px-3">
-                                <input class="appearance-none block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-quantity" type="number" name="quantity" placeholder="0">
+                                <input class="bg-gray-200 focus:bg-gray-100 block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="grid-quantity" type="number" name="quantity" placeholder="0">
                                 <div class="inline-block relative w-full mb-3">
                                     <select class="block appearance-none w-full bg-white 
                                                     border border-gray-400 hover:border-gray-500 
@@ -72,7 +83,7 @@
                             Price
                         </label>
                         <div class="flex flex-col lg:flex-row gap px-3">
-                            <input class="appearance-none block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-quantity" type="number" name="price" placeholder="0">
+                            <input class="bg-gray-200 focus:bg-gray-100 block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="grid-quantity" type="number" name="price" placeholder="0">
                             <p class="py-2 text-center mx-0 lg:mx-2">per</p>
                             <div class="inline-block relative w-full">
                                 <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="qty_price_per_unit" id="grid-qty-price">
@@ -88,7 +99,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col flex-wrap mx-auto py-8">
-                    <main class="">
+                    <main class="border-2 border-gray-300 rounded-md">
                         <!-- file upload modal -->
                         <article aria-label="File Upload Modal" class="relative h-full flex flex-col bg-white rounded-md" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragLeaveHandler(event);" ondragenter="dragEnterHandler(event);">
                             <!-- overlay -->
@@ -127,8 +138,8 @@
 
                             <!-- sticky footer -->
                             <footer class="flex justify-end px-8 pb-8 pt-4">
-                                <button id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-                                Cancel
+                                <button id="cancel" class="ml-3 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+                                    Cancel
                                 </button>
                             </footer>
                         </article>
@@ -192,9 +203,6 @@
                 </div>
                 <!-- sticky footer -->
                 <footer class="flex justify-center px-8 pb-8 pt-4 mt-4">
-                    <!-- <button id="submit" class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
-                        Add Product
-                    </button> -->
                     <x-gen-button id="submit">
                         Add Product
                     </x-gen-button>
