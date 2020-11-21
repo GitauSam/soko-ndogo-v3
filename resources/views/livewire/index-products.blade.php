@@ -1,8 +1,20 @@
-<div class="py-8">
-  <div>
-      <livewire:notification-read />
-      <h2 class="text-2xl font-semibold leading-tight">Products</h2>
-  </div>
+<div class="py-16">
+    <div> 
+        <livewire:notification-read />
+        <div class="flex flex-col lg:justify-between lg:flex-row">
+            <h2 class="inline-flex items-center text-2xl font-semibold leading-tight">Products</h2>
+            <!-- <x-general-link>Add Product</x-general-link> -->
+            <a
+                href="{{ route('products.create') }}"
+                class= "border-2 border-green-800  
+                        block rounded-sm font-bold py-4 px-6 mr-2 
+                        flex items-center bg-green-800 hover:bg-transparent 
+                        text-white hover:text-green-800
+                        transition ease-in-out duration-500">
+                    Add Product
+            </a>
+        </div>
+    </div>
   <div class="my-2 flex sm:flex-row flex-col">
       <div class="flex flex-row mb-1 sm:mb-0">
           <div class="relative">

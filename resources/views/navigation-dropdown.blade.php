@@ -1,5 +1,5 @@
 @guest
-    <nav x-data="{ open: false }" class="fixed w-full h-24 z-5 shadow-lg bg-green-800">
+    <nav x-data="{ open: false }" class="fixed w-full z-5 shadow-lg bg-green-800" style="height: 10%;">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between h-full">
@@ -76,7 +76,7 @@
         </div>
     </nav>
 @else
-    <nav x-data="{ open: false }" class="fixed w-full h-24 z-40 shadow bg-green-800">
+    <nav x-data="{ open: false }" class="fixed w-full z-40 shadow bg-green-800" style="height: 10%;">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between h-full">

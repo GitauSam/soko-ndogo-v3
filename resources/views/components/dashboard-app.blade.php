@@ -13,6 +13,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
         <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../../_tailwind-headers-footers/tailwind-headers-footers.css" />
 
@@ -28,21 +29,20 @@
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.0/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex flex-col justify-between">
-            @livewire('navigation-dropdown')
-
-            <!-- Page Heading -->
-            <header class="shadow">
-                <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
-                    {{-- $header --}}
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <main class>
-                {{ $slot }}
-            </main>
+        <div class="min-h-screen bg-red-500 flex flex-col justify-between">
+            <div style="height: 10%; background: green;">
+                @livewire('navigation-dropdown')
+            </div>
+            <div style="height: 80%; background: yellow;">
+                <!-- Page Content -->
+                <main class>
+                    {{ $slot }}
+                </main>
+            </div>
+            <div style="height: 10%;">
+                <x-global-footer />
+            </div>
         </div>
-        @stack('modals')
+        @stack('modals') 
     </body>
 </html>
