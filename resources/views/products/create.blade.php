@@ -24,7 +24,11 @@
                             Name
                         </label>
                         <div class="px-3">
-                            <input class="bg-gray-200 focus:bg-gray-100 block w-full text-gray-700 border-b-2 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="grid-product-name" name="product_name" type="text" placeholder="Product Name">
+                            <input class="bg-gray-200 focus:bg-gray-100 block w-full text-gray-700 
+                                            border-b-2 rounded py-3 px-4 mb-3 leading-tight 
+                                            focus:outline-none focus:border-gray-500" 
+                                id="grid-product-name" name="product_name" type="text" 
+                                placeholder="Product Name">
                         </div>
                     </div>
                     <div class="w-full md:w-1/2">
