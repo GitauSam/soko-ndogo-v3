@@ -23,7 +23,8 @@
                     <path d="M13.25 0H8.86542V19H13.25V0Z" fill="#0a165c"></path>
                     <path d="M20.5576 7.30771H12.5192V11.6923H20.5576V7.30771Z" fill="#0a165c"></path>
                     <path d="M24.2115 0H19.8269V19H24.2115V0Z" fill="#0a165c"></path>
-                </svg></a>
+                </svg>
+            </a>
         </p>
         <span
             class="text-sm text-white font-bold inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
