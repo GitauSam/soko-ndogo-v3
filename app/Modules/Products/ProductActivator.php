@@ -12,8 +12,8 @@ class ProductActivator
         $this->modelRepository = new ProductRepository($this->model);
     }
 
-    public function addProduct($data) {
-        return $this->modelRepository->createProduct($data);
+    public function addProduct($data, $serviceOrder) {
+        return $this->modelRepository->createProduct($data, $serviceOrder);
     }
 
     public function returnProductById($id) {

@@ -17,7 +17,7 @@ class ProductRepository
         $this->model = $product;
     }
     
-    public function createProduct($data) {
+    public function createProduct($data, $serviceOrder) {
         try {
             $product = $this->model->create(
                             array(
@@ -31,6 +31,13 @@ class ProductRepository
                                 'no_of_images' => count($data->photos),
                             )
                         );
+            
+            $serviceOrder->process_status = 2;
+            $serviceOrder->transaction_status = 100;
+            $serviceOrder->product_id = $product->id;
+            $serviceOrder->response_message = "Saved product successfully. Images upload pending.";
+            $serviceOrder->display_message = "Saved product successfully. Images upload pending.";
+            $serviceOrder->save();
 
             $productImagesActivator = new ProductImagesActivator(new ProductImages());
 

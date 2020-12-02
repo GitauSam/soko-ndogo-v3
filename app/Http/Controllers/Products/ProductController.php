@@ -14,6 +14,7 @@ use App\Exception;
 use App\Exceptions\CreateProductException;
 use App\Exceptions\FetchProductException;
 use App\Notifications\ProductCreated;
+use App\Models\ServiceOrder\ServiceOrder;
 
 class ProductController extends Controller
 {
@@ -61,18 +62,53 @@ class ProductController extends Controller
      */
     public function store(StoreProduct $request)
     {
+        // process status '1' => start of process
+        // process status '2' => process is in progress
+        // process status '25' => exception occurred during execution of process
+        // transaction status '100' => transaction is incomplete
+        // transaction status '99' => exception occurred during execution of process
+
+
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'store-new-product';
+        $serviceOrder->process_status = 1;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 1;
+        $serviceOrder->display_message = 'Saving Product Process Initiated';
+        $serviceOrder->save();
+
         try {
             $productActivator = new ProductActivator();
-            $productActivator->addProduct($request);
+            $productActivator->addProduct($request, $serviceOrder);
 
             auth()->user()->notify(new ProductCreated());
 
             return redirect()->route('products.index');
         } catch (CreateProductException $e) {
             // add logic to handle create product exception here
+
+            $serviceOrder->display_message = "Unable to create product '" . $request->product_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to create product '" 
+                                                . $request->product_name . "'. 
+                                                Exception occurred true. 
+                                                Message: " . $e->message;
+            $serviceOrder->save();
         } catch (Exception $e) {
             // add logic to handle any other exception here
+
+            $serviceOrder->display_message = "Unable to create product '" . $request->product_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to create product '" 
+                                                . $request->product_name . "'. 
+                                                Exception occurred true. 
+                                                Message: " . $e->message;
+            $serviceOrder->save();
         }
+
     }
 
     /**
