@@ -17,6 +17,7 @@ class Product extends Model
         'unit', 
         'price', 
         'category', 
+        'category_id', 
         'purchased', 
         'no_of_images', 
         'remainder', 
@@ -25,6 +26,10 @@ class Product extends Model
 
     public function user() {
         return $this->belongsTo('App\Models\User');
+    }
+
+    public function categories() {
+        return $this->belongsTo('App\Models\Categories\Categories', 'category_id');
     }
 
     public function productImages() {

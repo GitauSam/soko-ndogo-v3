@@ -25,4 +25,8 @@ class ServiceOrder extends Model
         'display_message',
         'response_message'
     ];
+
+    public function transactionLogs() {
+        $this->hasMany('App\Models\TransactionLog');
+    }
 }

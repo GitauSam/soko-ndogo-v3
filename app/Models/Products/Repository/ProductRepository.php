@@ -6,10 +6,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Products\Product;
 use App\Models\Products\ProductImages;
 use App\Modules\Products\ProductImagesActivator;
-// use App\Exceptions\EditProductException;
+use App\Exceptions\FetchProductException;
+use App\Exceptions\EditProductException;
 use App\Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\CreateProductException;
+use App\Models\TransactionLog\TransactionLog;
 
 class ProductRepository
 {
@@ -18,6 +21,11 @@ class ProductRepository
     }
     
     public function createProduct($data, $serviceOrder) {
+        
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "save-product";
+
         try {
             $product = $this->model->create(
                             array(
@@ -26,7 +34,8 @@ class ProductRepository
                                 'quantity' => $data->quantity,
                                 'unit' => $data->qty_unit,
                                 'price' => $data->price,
-                                'category' => $data->category,
+                                'category' => 'N/A',
+                                'category_id' => $data->category,
                                 'status'=> 1,
                                 'no_of_images' => count($data->photos),
                             )
@@ -35,24 +44,67 @@ class ProductRepository
             $serviceOrder->process_status = 2;
             $serviceOrder->transaction_status = 100;
             $serviceOrder->product_id = $product->id;
+            $serviceOrder->category_id = $product->category_id;
             $serviceOrder->response_message = "Saved product successfully. Images upload pending.";
             $serviceOrder->display_message = "Saved product successfully. Images upload pending.";
             $serviceOrder->save();
 
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Saved product successfully. Images upload pending.";
+            $transactionLog->save();
+
             $productImagesActivator = new ProductImagesActivator(new ProductImages());
 
             foreach($data->photos as $photo) {
-                $productImagesActivator->addProductImage($product->id, $photo);
+                $productImagesActivator->addProductImage($product->id, $photo, $serviceOrder);
             }
         } catch (QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to save product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
             throw new CreateProductException($e);
         } 
     }
 
-    public function fetchProductById($id) {
+    public function fetchProductById($id, $serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "save (upload)-product";
+
         try {
-            return Product::findOrFail($id);
+            
+            $product = Product::findOrFail($id);
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->product_id = $product->id;
+            $serviceOrder->category_id = $product->category_id;
+            $serviceOrder->response_message = "Fetched product successfully.";
+            $serviceOrder->display_message = "Fetched product successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Fetched product successfully.";
+            $transactionLog->save();
+
+            return $product;
+
+        } catch(ModelNotFoundException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchProductException($e);
         } catch(QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
             throw new FetchProductException($e);
         }
     }
@@ -67,26 +119,65 @@ class ProductRepository
         }
     }
 
-    public function updateProduct($data, $id) {
+    public function updateProduct($data, $id, $serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "update-product";
+
         try {
-            $product = $this->fetchProductById($id);
+            $product = $this->fetchProductById($id, $serviceOrder);
             $product->product_name = $data->product_name;
             $product->quantity = $data->quantity;
             $product->unit = $data->qty_unit;
             $product->price = $data->price;
-            $product->category = $data->category;
+            $product->category_id = $data->category;
 
             $product->save();
 
+            $serviceOrder->process_status = 2;
+            $serviceOrder->transaction_status = 100;
+            $serviceOrder->product_id = $product->id;
+            $serviceOrder->category_id = $product->category_id;
+            $serviceOrder->response_message = "Updated product successfully. Images upload pending.";
+            $serviceOrder->display_message = "Updated product successfully. Images upload pending.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Updated product successfully. Images upload pending.";
+            $transactionLog->save();
+
             $productImagesActivator = new ProductImagesActivator(new ProductImages());
 
-            foreach($data->photos as $photo) {
-                $productImagesActivator->addProductImage($product->id, $photo);
+            if ($data->has('photos')) {
+
+                foreach($data->photos as $photo) {
+                    $productImagesActivator->addProductImage($product->id, $photo, $serviceOrder);
+                }
+
+            } else {
+                $serviceOrder->process_status = 30;
+                $serviceOrder->transaction_status = 30;
+                $serviceOrder->response_message = "Updated product successfully. No images to upload.";
+                $serviceOrder->display_message = "Updated product successfully. No images to upload.";
+                $transactionLog->response_message = "Updated product successfully. No images to upload.";
+                $transactionLog->save();
             }
 
         } catch(QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to update product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
             throw new EditProductException($e);
         } catch(Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to update product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+            $serviceOrder->save();
+
             throw new EditProductException($e);
         }
     }

@@ -16,16 +16,16 @@ class ProductActivator
         return $this->modelRepository->createProduct($data, $serviceOrder);
     }
 
-    public function returnProductById($id) {
-        return $this->modelRepository->fetchProductById($id);
+    public function returnProductById($id, $serviceOrder) {
+        return $this->modelRepository->fetchProductById($id, $serviceOrder);
     }
 
     public function returnAllUserProducts() {
         return $this->modelRepository->fetchAllUserProducts();
     }
 
-    public function editProduct($data, $id) {
-        return $this->modelRepository->updateProduct($data, $id);
+    public function editProduct($data, $id, $serviceOrder) {
+        return $this->modelRepository->updateProduct($data, $id, $serviceOrder);
     }
 
     public function removeProduct($id) {

@@ -15,6 +15,11 @@ class CreateTransactionLogsTable extends Migration
     {
         Schema::create('transaction_logs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('service_order');
+            $table->foreign('service_order')->references('id')->on('service_orders');
+            $table->string('event');
+            $table->integer('event_status');
+            $table->string('response_message');
             $table->timestamps();
         });
     }

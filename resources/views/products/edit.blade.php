@@ -42,13 +42,12 @@
                                             px-4 py-3 pr-8 rounded shadow leading-tight 
                                             focus:outline-none focus:shadow-outline" 
                                     name="category" id="grid-category-name">
-                                <option value="Cereals" {{ ( "Cereals" == $product->category ) ? 'selected' : '' }} >Cereals</option>
-                                <option value="Poultry Produce" {{ ( "Poultry Produce" == $product->category ) ? 'selected' : '' }} >Poultry Produce</option>
-                                <option value="Dairy Produce" {{ ( "Dairy Produce" == $product->category ) ? 'selected' : '' }}>Dairy Produce</option>
-                                <option value="Fruits" {{ ( "Fruits" == $product->category ) ? 'selected' : '' }}>Fruits</option>
-                                <option value="Legumes" {{ ( "Legumes" == $product->category ) ? 'selected' : '' }}>Legumes</option>
-                                <option value="Aquatic Produce" {{ ( "Aquatic Produce" == $product->category ) ? 'selected' : '' }}>Aquatic Produce</option>
-                                <option value="Beef" {{ ( "Beef" == $product->category ) ? 'selected' : '' }}>Beef</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" 
+                                            {{ ( $category->id == $product->category_id ) ? 'selected' : '' }}>
+                                            {{ $category->category_name }}
+                                    </option>
+                                @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-5 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>

@@ -15,6 +15,7 @@ use App\Exceptions\CreateProductException;
 use App\Exceptions\FetchProductException;
 use App\Notifications\ProductCreated;
 use App\Models\ServiceOrder\ServiceOrder;
+use App\Models\Categories\Categories;
 
 class ProductController extends Controller
 {
@@ -51,7 +52,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products/create');
+        $categories = Categories::all();
+        return view('products/create', ['categories' => $categories]);
     }
 
     /**
@@ -62,12 +64,6 @@ class ProductController extends Controller
      */
     public function store(StoreProduct $request)
     {
-        // process status '1' => start of process
-        // process status '2' => process is in progress
-        // process status '25' => exception occurred during execution of process
-        // transaction status '100' => transaction is incomplete
-        // transaction status '99' => exception occurred during execution of process
-
 
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'store-new-product';
@@ -86,26 +82,22 @@ class ProductController extends Controller
 
             return redirect()->route('products.index');
         } catch (CreateProductException $e) {
-            // add logic to handle create product exception here
 
             $serviceOrder->display_message = "Unable to create product '" . $request->product_name . "'.";
             $serviceOrder->process_status = 25;
             $serviceOrder->transaction_status = 99;
             $serviceOrder->response_message = "Unable to create product '" 
                                                 . $request->product_name . "'. 
-                                                Exception occurred true. 
-                                                Message: " . $e->message;
+                                                Error: " . $e->getMessage();
             $serviceOrder->save();
         } catch (Exception $e) {
-            // add logic to handle any other exception here
 
             $serviceOrder->display_message = "Unable to create product '" . $request->product_name . "'.";
             $serviceOrder->process_status = 25;
             $serviceOrder->transaction_status = 99;
             $serviceOrder->response_message = "Unable to create product '" 
                                                 . $request->product_name . "'. 
-                                                Exception occurred true. 
-                                                Message: " . $e->message;
+                                                Error: " . $e->getMessage();
             $serviceOrder->save();
         }
 
@@ -119,15 +111,41 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'show-product';
+        $serviceOrder->process_status = 1;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 1;
+        $serviceOrder->display_message = 'Show Product Process Initiated';
+        $serviceOrder->save();
+
         try {
+
             $productActivator = new ProductActivator();
-            $product = $productActivator->returnProductById($id);
+            $product = $productActivator->returnProductById($id, $serviceOrder);
             return view('products.show',['product' => $product, 
                 'loc' => 'storage/photos/products/thumbnails/']);
+
         } catch (FetchProductException $e) {
-            // add logic to handle exception here
+
+            $serviceOrder->display_message = "Unable to show product. Contact admin for assistance.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to show product product with id: '" 
+                                                . $id . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
+
         } catch (Exception $e) {
 
+            $serviceOrder->display_message = "Unable to show product. Contact admin for assistance.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to show product with id: '" 
+                                                . $id . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
         }
     }
 
@@ -139,14 +157,32 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'fetch-product-edit';
+        $serviceOrder->process_status = 1;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 1;
+        $serviceOrder->display_message = 'Fetch Product (Edit) Process Initiated';
+        $serviceOrder->save();
+
         try {
             $productActivator = new ProductActivator(new Product());
-            $product = $productActivator->returnProductById($id);
+            $product = $productActivator->returnProductById($id, $serviceOrder);
+            $categories = Categories::all();
 
             return view('products.edit', ['product' => $product, 
+                'categories' => $categories,
                 'loc' => 'storage/photos/products/thumbnails/']);
         } catch (Exception $e) {
-            // add logic to handle exception here
+
+            $serviceOrder->display_message = "Unable to edit product. Contact admin for assistance.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to edit product product with id: '" 
+                                                . $id . "'. 
+                                                Error: " . $e->getMessage();
         }
     }
 
@@ -159,14 +195,41 @@ class ProductController extends Controller
      */
     public function update(UpdateProductDetails $request, $id)
     {
-        // dd($request);
+
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'update-product';
+        $serviceOrder->process_status = 1;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 1;
+        $serviceOrder->display_message = 'Saving Product Process Initiated';
+        $serviceOrder->save();
+
         try {
             $productActivator = new ProductActivator();
-            $productActivator->editProduct($request, $id);
+            $productActivator->editProduct($request, $id, $serviceOrder);
+
+            if (!$request->has('photos')) {
+
+                $serviceOrder->process_status = 30;
+                $serviceOrder->transaction_status = 30;
+                $serviceOrder->response_message = "Updated product successfully. No images to upload.";
+                $serviceOrder->display_message = "Updated product successfully. No images to upload.";
+                $serviceOrder->save();
+                
+            }
 
             return redirect()->route('products.index')->with('success','Product updated successfully');
         } catch (Exception $e) {
-            // add logic to handle exception here
+
+            $serviceOrder->display_message = "Unable to update product (NB: Name could be updated)'" 
+                                                . $request->product_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to update product (NB: Name could be updated)'" 
+                                                . $request->product_name . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
         }
     }
 

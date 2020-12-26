@@ -15,7 +15,7 @@ class ProductImagesActivator {
         $this->modelRepository = new ProductImagesRepository($this->model);
     }
 
-    public function addProductImage($prod_id, $photo) {
+    public function addProductImage($prod_id, $photo, $serviceOrder) {
         $imageUrls = $this->uploadProductImages($photo);
         
         foreach ($imageUrls as $type => $url) {
@@ -26,14 +26,20 @@ class ProductImagesActivator {
                 $saved_image_name = $imageUrls["saved_thumbnail_name"];
 
                 $this->modelRepository->createProductImage($prod_id, $photo, $url, 
-                $is_thumbnail, $saved_image_name);
+                $is_thumbnail, $saved_image_name, $serviceOrder);
             } else if ($type === "fullsize_storage_path") {
                 $saved_image_name = $imageUrls["saved_full_image_name"];
 
                 $this->modelRepository->createProductImage($prod_id, $photo, $url, 
-                $is_thumbnail, $saved_image_name);
+                $is_thumbnail, $saved_image_name, $serviceOrder);
             }
         }
+
+        $serviceOrder->process_status = 30;
+        $serviceOrder->transaction_status = 30;
+        $serviceOrder->response_message = "Saved (Updated) product and images successfully";
+        $serviceOrder->display_message = "Saved (Updated) product and images successfully.";
+        $serviceOrder->save();
         
     }
 

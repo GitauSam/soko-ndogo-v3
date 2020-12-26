@@ -43,13 +43,9 @@
                                             px-4 py-3 pr-8 rounded shadow leading-tight 
                                             focus:outline-none focus:shadow-outline" 
                                     name="category" id="grid-category-name">
-                                <option value="Cereals">Cereals</option>
-                                <option value="Poultry Produce">Poultry Produce</option>
-                                <option value="Dairy Produce">Dairy Produce</option>
-                                <option value="Fruits">Fruits</option>
-                                <option value="Legumes">Legumes</option>
-                                <option value="Aquatic Produce">Aquatic Produce</option>
-                                <option value="Beef">Beef</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-5 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
