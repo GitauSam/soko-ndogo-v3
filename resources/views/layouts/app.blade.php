@@ -25,19 +25,13 @@
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.0/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex flex-col justify-between">
-            @livewire('navigation-dropdown')
+        <div class="min-h-screen bg-white flex flex-col justify-between">
 
-            <!-- Page Heading -->
-            <header class="shadow">
-                <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
-                    {{-- $header --}}
-                </div>
-            </header>
+            @livewire('navigation-dropdown')
 
             <!-- Page Content -->
             <main class>
-                <div class="container mx-auto mt-16 px-4  sm:px-8 antialiased font-sans">
+                <div class="mx-auto mt-20 py-12 antialiased font-sans">
                     {{ $slot }}
                 </div>
             </main>

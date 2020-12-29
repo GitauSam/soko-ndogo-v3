@@ -1,3 +1,5 @@
 <x-app-layout>
-    <livewire:index-products />
+    <div class="container mx-auto">
+        <livewire:index-products />
+    </div>
 </x-app-layout>

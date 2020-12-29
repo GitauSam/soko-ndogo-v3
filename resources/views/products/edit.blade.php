@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container mx-auto flex flex-col mt-20 mb-12 px-4">
+    <div class="container mx-auto flex flex-col">
 
         <!-- <div class="p-7 flex flex-inline justify-center">
             <h2 class="text-2xl sm:text-4xl font-semibold">Edit Product Details</h2>

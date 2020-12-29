@@ -6,17 +6,13 @@
                 <x-slot name="title">
                     Welcome,
                 </x-slot>
-                <p class="leading-relaxed mb-8 font-normal">
+                <p class="leading-relaxed mb-2 font-normal">
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
                     Nesciunt quae facilis tempora corporis culpa, rerum nemo sunt, 
-                    beatae consectetur temporibus, eum error. 
-                    Aperiam eveniet provident enim vero corrupti. 
-                    Distinctio harum voluptatum repellat officia saepe hic corrupti, 
-                    at, incidunt laborum, tempore nisi necessitatibus aspernatur 
-                    exercitationem fugit ex voluptas. Fugit, dolores reprehenderit.
+                    beatae consectetur temporibus, eum error.
                 </p>
                 <x-slot name="action">
-                    <a href="{{ route('login') }}">Login</a>
+                    <a href="#">Read More...</a>
                 </x-slot>
             </x-introduce-service-section>
         @else
@@ -34,7 +30,7 @@
                     exercitationem fugit ex voluptas. Fugit, dolores reprehenderit.
                 </p>
                 <x-slot name="action">
-                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                    <a href="#">Read More...</a>
                 </x-slot>
             </x-introduce-service-section>
         @endguest
@@ -125,7 +121,7 @@
                     </p>
                     <div class="flex justify-center">
                         <button
-                            class="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
                     </div>
                 </div>
             </div>
@@ -144,7 +140,7 @@
                     </p>
                     <div class="flex justify-center">
                         <button
-                            class="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
                     </div>
                 </div>
                 <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
@@ -171,7 +167,7 @@
                     </p>
                     <div class="flex justify-center">
                         <button
-                            class="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
                     </div>
                 </div>
             </div>
@@ -190,7 +186,7 @@
                     </p>
                     <div class="flex justify-center">
                         <button
-                            class="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
                     </div>
                 </div>
                 <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">

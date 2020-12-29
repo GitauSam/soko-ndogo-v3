@@ -29,19 +29,14 @@
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.0/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-red-500 flex flex-col justify-between">
-            <div style="height: 10%; background: green;">
-                @livewire('navigation-dropdown')
-            </div>
-            <div style="height: 80%; background: yellow;">
-                <!-- Page Content -->
-                <main class>
+        <div class="min-h-screen flex flex-col justify-between">
+        
+            @livewire('navigation-dropdown')
+        
+            <main class="h-full">
                     {{ $slot }}
-                </main>
-            </div>
-            <div style="height: 10%;">
-                <x-global-footer />
-            </div>
+            </main>
+            
         </div>
         @stack('modals') 
     </body>

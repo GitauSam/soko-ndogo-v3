@@ -35,12 +35,39 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'fetch-index-product';
+        $serviceOrder->process_status = 0;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 0;
+        $serviceOrder->display_message = 'Index Process (GET) Started.';
         
+        $serviceOrder->save();
+
         try {
+
+            $serviceOrder->display_message = 'Index Process (GET) Successful.';
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = 'Index Process (GET) Successful.';
+
+            $serviceOrder->save();
+
             $notifications = auth()->user()->unreadNotifications;
-            return view('products.index', ['notifications' => $notifications]);            
+            return view('products.index', ['notifications' => $notifications]); 
+
         } catch(FetchProductException $e) {
-            // add logic to handle exception here
+            
+            $serviceOrder->display_message = 'Index Process (GET) Failed. Error: ' . $e->message();
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = 'Index Process (GET) Failed. Error: ' . $e->message();
+
+            $serviceOrder->save();
+
+            // put failure view here
+
         }
 
     }
@@ -52,8 +79,41 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Categories::all();
-        return view('products/create', ['categories' => $categories]);
+
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'fetch-create-product';
+        $serviceOrder->display_message = 'Create Process (GET) Started.';
+        $serviceOrder->process_status = 0;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 0;
+
+        $serviceOrder->save();
+
+        try {
+
+            $serviceOrder->display_message = 'Create Process (GET) Successful.';
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = 'Create Process (GET) Successful.';
+            $serviceOrder->save();
+
+            $categories = Categories::all();
+            return view('products/create', ['categories' => $categories]);
+
+        } catch (Exception $e) {
+
+            $serviceOrder->display_message = 'Create Process (GET) Failed. Error: ' . $e->message();
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = 'Create Process (GET) Failed. Error: ' . $e->message();
+
+            $serviceOrder->save();
+
+            // put failure view here
+
+        }
+
     }
 
     /**
@@ -113,7 +173,7 @@ class ProductController extends Controller
     {
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'show-product';
-        $serviceOrder->process_status = 1;
+        $serviceOrder->process_status = 0;
         $serviceOrder->user_id = auth()->user()->id;
         $serviceOrder->user_email = auth()->user()->email;
         $serviceOrder->to_display = 1;
@@ -160,7 +220,7 @@ class ProductController extends Controller
         
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'fetch-product-edit';
-        $serviceOrder->process_status = 1;
+        $serviceOrder->process_status = 0;
         $serviceOrder->user_id = auth()->user()->id;
         $serviceOrder->user_email = auth()->user()->email;
         $serviceOrder->to_display = 1;

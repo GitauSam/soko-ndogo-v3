@@ -1,31 +1,55 @@
 @guest
-    <nav x-data="{ open: false }" class="fixed w-full z-5 shadow-lg bg-green-800" style="height: 10%;">
+    <nav x-data="{ open: false }" 
+        class="
+            fixed 
+            w-full 
+            z-50 
+            bg-custom
+            h-20
+        ">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between h-full">
                 <div class="flex">
-                    <!-- Logo -->
-                    <!-- <div class="flex-shrink-0 flex items-center"> -->
-                        <!-- <a href="{{ route('dashboard') }}">
-                            <x-jet-application-mark class="block h-9 w-auto" />
-                        </a> -->
-                    <!-- </div> -->
-
                     <!-- Navigation Links -->
-                    <div class="sm:-my-px flex">
+                    <div class="sm:-my-px 
+                                flex 
+                                hover:bg-green-800"
+                    >
                         <x-jet-nav-link 
                             href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                            <span class="text-lg font-semibold text-gray-300 hover:text-white">Soko Ndogo</span>
+                            <span class="text-lg font-semibold text-white hover:text-gray-300">Soko Ndogo</span>
                         </x-jet-nav-link>
                     </div>
                 </div>
 
                 <!-- Settings Dropdown -->
-                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <div class="hidden 
+                            sm:flex 
+                            sm:items-center 
+                            sm:ml-6
+                            px-2 
+                            border-b
+                            border-transparent 
+                            hover:border-white
+                            hover:bg-green-900"
+                >
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex items-center text-md font-medium text-gray-500 hover:text-white hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                    <div class="font-semibold">Enter</div>
+                            <button class="flex 
+                                            items-center 
+                                            text-md 
+                                            font-medium 
+                                            text-white
+                                            transition 
+                                            duration-150 
+                                            ease-in-out"
+                            >
+                                <div class="font-semibold
+                                            hover:text-gray-300"
+                                >
+                                    Enter
+                                </div>
 
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -76,7 +100,7 @@
         </div>
     </nav>
 @else
-    <nav x-data="{ open: false }" class="fixed w-full z-40 shadow bg-green-800" style="height: 10%;">
+    <nav x-data="{ open: false }" class="fixed w-full z-50 shadow bg-green-800" style="height: 10%;">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex justify-between h-full">
