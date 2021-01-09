@@ -12,24 +12,28 @@ class OrderActivator
         $this->modelRepository = new OrderRepository($this->model);
     }
 
-    public function addOrder($data) {
-        return $this->modelRepository->createOrder($data);
+    public function addOrder($data, $serviceOrder) {
+        return $this->modelRepository->createOrder($data, $serviceOrder);
     }
 
-    public function returnOrderById($id) {
-        return $this->modelRepository->fetchOrderById($id);
+    public function returnOrderById($id, $serviceOrder) {
+        return $this->modelRepository->fetchOrderById($id, $serviceOrder);
     }
 
-    public function returnAllUserOrders() {
-        return $this->modelRepository->fetchAllUserOrders();
+    public function returnAllUserOrders($serviceOrder) {
+        return $this->modelRepository->fetchAllUserOrders($serviceOrder);
     }
 
-    public function editOrder($data, $id) {
-        // return $this->modelRepository->updateProduct($data, $id);
+    public function returnAllNonServicedOrders($serviceOrder) {
+        return $this->modelRepository->fetchNonServicedOrders($serviceOrder);
     }
 
-    public function removeOrder($id) {
-        return $this->modelRepository->deactivateOrder($id);
+    public function editOrder($data, $id, $serviceOrder) {
+        return $this->modelRepository->updateOrder($data, $id, $serviceOrder);
+    }
+
+    public function removeOrder($id, $serviceOrder) {
+        return $this->modelRepository->deactivateOrder($id, $serviceOrder);
     }
 }
 

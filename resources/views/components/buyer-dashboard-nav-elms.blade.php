@@ -1,6 +1,6 @@
 <div>
     <!-- My Orders Link Start -->
-    <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="{{ route('orders.index') }}">
+    <a class="flex items-center py-6 px-6 text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="{{ route('orders.index') }}">
         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -13,7 +13,7 @@
     </a>
     <!-- My Orders Link End -->
     <!-- Serviced Orders Link Start -->
-    <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+    <a class="flex items-center py-6 px-6 text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
         href="#">
         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
@@ -26,7 +26,7 @@
     </a>
     <!-- Serviced Orders Link End -->
     <!-- Add An Order Link Start -->
-    <a class="flex items-center mt-4 py-2 px-6 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+    <a class="flex items-center py-6 px-6 text-white hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
         href="{{ route('orders.create') }}">
         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">

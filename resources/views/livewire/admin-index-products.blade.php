@@ -1,17 +1,9 @@
 <div>
     <livewire:notification-read />
-    <div class="ml-2">
-        <x-header-section>
-            <x-slot name="title">
-                Products
-            </x-slot>
-            <x-slot name="action">
-                {{ route('products.create') }}
-            </x-slot>
-            <x-slot name="description">
-                Add Product 
-            </x-slot>
-        </x-header-section>
+    <div class="flex flex-col py-2 px-2 lg:justify-between lg:flex-row">
+        <h2 class="inline-flex items-center my-auto text-2xl sm:text-4xl font-semibold leading-tight">
+            Non-Serviced Products
+        </h2>
     </div>
     <div class="my-2 mx-2 flex sm:flex-row flex-col">
         <div class="flex flex-row mb-1 sm:mb-0">
@@ -65,8 +57,8 @@
                 class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
         </div>
     </div>
-    <div class="px-2 py-4 overflow-x-auto">
-        <div class="inline-block min-w-0 sm:min-w-full md:min-w-full lg:min-w-full xl:min-w-full shadow rounded-lg">
+    <div class="py-4 overflow-x-auto">
+        <div class="inline-block min-w-0 sm:min-w-full md:min-w-full lg:min-w-full xl:min-w-full shadow rounded-lg mx-2 md:mx-0">
             <table class="min-w-0 sm:min-w-full md:min-w-full lg:min-w-full xl:min-w-full leading-normal">
                 <thead>
                     <tr>
@@ -133,8 +125,7 @@
                             </span>
                         </td>
                         <td class="flex flex-wrap px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('products.show', $product->id) }}">Show</a>
-                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="{{ route('products.edit', $product->id) }}">Edit</a>
+                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('products.show', $product->id) }}">Service</a>
                             <a wire:click="deactivateProduct('{{ $product->id }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</a>
                         </td>
                     </tr>

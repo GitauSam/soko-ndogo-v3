@@ -1,15 +1,16 @@
-<x-app-layout>
-    <div class="bg-white font-sans leading-normal tracking-normal antialiased">
+<x-app-welcome>
+    <div class="font-sans leading-normal tracking-normal antialiased">
         <!--- Welcome Section -->
         @guest          
             <x-introduce-service-section>
                 <x-slot name="title">
-                    Welcome,
+                    Welcome
                 </x-slot>
-                <p class="leading-relaxed mb-2 font-normal">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                    Nesciunt quae facilis tempora corporis culpa, rerum nemo sunt, 
-                    beatae consectetur temporibus, eum error.
+                <p class="leading-relaxed mt-2 mb-8 font-normal">
+                    We are a family owned organization that has partnered with farmers 
+                    who produce only the highest quality of agricultural products.
+                    Explore our site and order the freshest produce that will be delivered
+                    directly to your doorstep.
                 </p>
                 <x-slot name="action">
                     <a href="#">Read More...</a>
@@ -18,16 +19,13 @@
         @else
             <x-introduce-service-section>
                 <x-slot name="title">
-                    Welcome to Soko Ndogo,
+                    Welcome to Soko Ndogo
                 </x-slot>
-                <p class="leading-relaxed mb-8 font-normal">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                    Nesciunt quae facilis tempora corporis culpa, rerum nemo sunt, 
-                    beatae consectetur temporibus, eum error. 
-                    Aperiam eveniet provident enim vero corrupti. 
-                    Distinctio harum voluptatum repellat officia saepe hic corrupti, 
-                    at, incidunt laborum, tempore nisi necessitatibus aspernatur 
-                    exercitationem fugit ex voluptas. Fugit, dolores reprehenderit.
+                <p class="leading-relaxed mt-2 mb-8 font-normal">
+                    We are a family owned organization that has partnered with farmers 
+                    who produce only the highest quality of agricultural products.
+                    Explore our site and order the freshest produce that will be delivered
+                    directly to your doorstep.
                 </p>
                 <x-slot name="action">
                     <a href="#">Read More...</a>
@@ -43,63 +41,14 @@
             </div>
         </section>
         <section class="">
-            <div class="container px-5 py-24 mx-auto flex flex-wrap">
-                <div class="flex flex-col text-center w-full mb-20">
+            <div class="container px-5 pt-8 mx-auto flex flex-wrap">
+                <div class="flex flex-col text-center w-full">
                     <h2 class="text-xs text-black tracking-widest font-medium title-font mb-1 uppercase">
-                        Lorem ipsum dolor sit amet.
+                        We aim to empower agribusiness.
                     </h2>
                     <h1 class="sm:text-3xl text-2xl font-medium title-font text-black">
-                        Lorem ipsum dolor sit amet consectetur.
+                        Taking small scale farming to higher levels.
                     </h1>
-                </div>
-                <div class="flex flex-wrap -m-4">
-                    <div class="p-4 md:w-1/3">
-                        <div class="flex rounded-lg h-full bg-gray-200 p-8 flex-col">
-                            <div class="flex items-center mb-3">
-                                <h2 class="text-gray-700 text-lg title-font font-medium">Lorem, ipsum.</h2>
-                            </div>
-                            <div class="flex-grow">
-                                <p class="leading-relaxed text-gray-700 font-medium">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                                    Reprehenderit, delectus accusamus perspiciatis quod quas libero?..</p>
-                                <a href="#" class="mt-3 text-gray-700 inline-flex items-center font-medium">Learn More
-                                    »
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 md:w-1/3">
-                            <div class="flex rounded-lg h-full bg-gray-200 p-8 flex-col">
-                            <div class="flex items-center mb-3">
-                                <h2 class="text-gray-700 text-lg title-font font-medium">Lorem, ipsum.</h2>
-                            </div>
-                            <div class="flex-grow">
-                                <p class="leading-relaxed text-gray-700 font-medium">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                                    Ducimus provident atque facere, aspernatur voluptas voluptates!..
-                                </p>
-                                <a href="#" class="mt-3 text-gray-700 inline-flex items-center font-medium">Learn More
-                                    »
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 md:w-1/3">
-                            <div class="flex rounded-lg h-full bg-gray-200 p-8 flex-col">
-                            <div class="flex items-center mb-3">
-                                <h2 class="text-gray-700 text-lg title-font font-medium">Lorem, ipsum.</h2>
-                            </div>
-                            <div class="flex-grow">
-                                <p class="leading-relaxed text-gray-700 font-medium">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                                    Dolore alias asperiores corporis modi blanditiis doloribus...
-                                </p>
-                                <a href="#" class="mt-3 text-gray-700 inline-flex items-center font-medium">Learn More
-                                    »
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -111,17 +60,22 @@
                 </div>
                 <div
                     class="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
-                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black ">Lorem ipsum dolor sit.
-                        <br class="hidden lg:inline-block">Lorem, ipsum.
+                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black ">High nutrient yield.
+                        <br class="hidden lg:inline-block">Healthier produce.
                     </h1>
                     <p class="mb-8 leading-relaxed">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                        Accusamus soluta sit doloribus porro atque numquam voluptatem quam itaque? 
-                        Quibusdam iusto amet, aperiam ea rerum quisquam.
+                        We assist our farmers to produce high quality yield ensuring the produce has the highest
+                        possible nutrient content that our customers expect from us.
                     </p>
                     <div class="flex justify-center">
-                        <button
-                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                        @guest
+                        @else
+                            @if (auth()->user()->can('product-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Product</button>
+                            @elseif (auth()->user()->can('order-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Order</button>
+                            @endif
+                        @endguest
                     </div>
                 </div>
             </div>
@@ -130,17 +84,21 @@
             <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
                 <div
                     class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black">Lorem ipsum dolor sit.
-                        <br class="hidden lg:inline-block text-black">Lorem, ipsum.
+                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black">Best prices.
+                        <br class="hidden lg:inline-block text-black">Good for economic value.
                     </h1>
                     <p class="mb-8 leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-                        Sint modi fugit explicabo error ab aliquid corporis voluptatem, 
-                        iure cumque repudiandae saepe dolore illo quo aut!
+                        Work with us to find the best value for your needs. We aim to create an environment where everyone benefits from each other.
                     </p>
                     <div class="flex justify-center">
-                        <button
-                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                        @guest
+                        @else
+                            @if (auth()->user()->can('product-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Product</button>
+                            @elseif (auth()->user()->can('order-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Order</button>
+                            @endif
+                        @endguest
                     </div>
                 </div>
                 <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
@@ -157,17 +115,20 @@
                 </div>
                 <div
                     class="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
-                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black">Lorem ipsum dolor sit amet.
-                        <br class="hidden lg:inline-block">Lorem, ipsum.
-                    </h1>
+                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black">Varied inventory.</h1>
                     <p class="mb-8 leading-relaxed">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Cupiditate quidem adipisci quaerat ad deleniti distinctio, perspiciatis voluptatem tempore ea fugit itaque, 
-                        quibusdam natus quam doloribus dolor quae possimus minima provident!
+                        We deal with many agricultural products as we aim to provide our customers an opportunity to select a plethora of items 
+                        from the comfort of their own couch and have them delivered conveniently to them.
                     </p>
                     <div class="flex justify-center">
-                        <button
-                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                        @guest
+                        @else
+                            @if (auth()->user()->can('product-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Product</button>
+                            @elseif (auth()->user()->can('order-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Order</button>
+                            @endif
+                        @endguest
                     </div>
                 </div>
             </div>
@@ -176,17 +137,21 @@
             <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
                 <div
                     class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black">Lorem ipsum dolor sit amet.
-                        <br class="hidden lg:inline-block">Lorem, ipsum.
+                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black">High quality livestock produce.
+                        <br class="hidden lg:inline-block">Healthy & nutritious.
                     </h1>
                     <p class="mb-8 leading-relaxed">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam, 
-                        debitis eos fugiat explicabo tempore ut quas odit repellendus ea saepe quos hic, 
-                        quo ad deleniti, quibusdam officiis vel cum accusantium?
+                        We source animal produce from farms that only use high quality feeds for their animals to ensure prime and delicious yield.
                     </p>
                     <div class="flex justify-center">
-                        <button
-                            class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Lorem</button>
+                        @guest
+                        @else
+                            @if (auth()->user()->can('product-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Product</button>
+                            @elseif (auth()->user()->can('order-create'))
+                                <button class="border-2 border-black  text-black rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-white hover:text-indigo-500 transition ease-in-out duration-700">Add Order</button>
+                            @endif
+                        @endguest
                     </div>
                 </div>
                 <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
@@ -200,20 +165,10 @@
                 <div class="flex flex-col text-center w-full mb-20">
                     <h1 class="text-2xl font-medium title-font mb-4 text-black">Meet the team</h1>
                     <p class="lg:w-2/3 mx-auto leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae odit suscipit placeat ex, 
-                        at saepe pariatur illum soluta blanditiis ab velit commodi tenetur omnis facere deleniti! 
-                        Quis exercitationem ipsa labore accusamus enim nisi deserunt tempora et magnam inventore? 
-                        Officiis corporis, quidem rem minima mollitia ratione quaerat quis, laborum magnam ad aperiam 
-                        minus ipsa nesciunt recusandae, voluptatibus facilis? Voluptate exercitationem provident dignissimos, 
-                        assumenda reiciendis repellendus voluptatibus, corporis id nostrum accusamus quam, 
-                        doloribus officiis sapiente laborum fuga illo consequuntur. Nulla, cumque animi. 
-                        Sint vitae qui veniam alias reiciendis totam nesciunt aspernatur debitis aperiam quisquam 
-                        repudiandae velit excepturi, corrupti labore est voluptatem quas ab tempore. 
-                        Iste rerum voluptates in cum, blanditiis quam neque nesciunt soluta, eius distinctio vel 
-                        aut est reiciendis sunt dolor officia sapiente ipsum. Delectus omnis est placeat corporis 
-                        inventore! Iste reiciendis nisi recusandae explicabo pariatur assumenda architecto neque 
-                        velit corrupti sint molestias, quisquam animi suscipit quaerat eaque itaque blanditiis 
-                        aspernatur.
+                        Here is the team that do their best to bring you the best produce the land can offer.
+                        They go out into the fields to find the best farms to partner with to ensure the customers 
+                        get the highest quality foods that are produced by our farmers. From their efforts, we are 
+                        able to give the best prices that cannot be rivaled with in the marketplace.
                     </p>
                 </div>
                 <div class="text-gray-600 flex flex-wrap -m-4">
@@ -265,4 +220,4 @@
             </div>
         </section>
     </div>
-</x-app-layout>        
+</x-app-welcome>        

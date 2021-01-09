@@ -21,7 +21,11 @@ class ProductActivator
     }
 
     public function returnAllUserProducts() {
-        return $this->modelRepository->fetchAllUserProducts();
+        return $this->modelRepository->fetchAllUserProducts($serviceOrder);
+    }
+
+    public function returnAllNonPurchasedProducts($serviceOrder) {
+        return $this->modelRepository->fetchAllNonPurchasedProducts($serviceOrder);
     }
 
     public function editProduct($data, $id, $serviceOrder) {

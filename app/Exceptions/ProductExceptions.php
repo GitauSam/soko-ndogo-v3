@@ -12,6 +12,8 @@ class EditProductException extends RuntimeException {}
 
 class DeactivateProductException extends RuntimeException {}
 
+class FetchNonPurchasedException extends RuntimeException {}
+
 // product images exceptions
 class FetchProductImagesException extends RuntimeException {}
 

@@ -9,6 +9,9 @@ use App\Models\Products\Product;
 use App\Modules\Orders\OrderActivator;
 use App\Models\Orders\Orders;
 
+// Log Imports
+use App\Models\ServiceOrder\ServiceOrder;
+
 class DashboardController extends Controller
 {
     //
@@ -26,21 +29,42 @@ class DashboardController extends Controller
              * Declare variables to hold count of items to be displayed on dashboard
              * depending on user type
              */
+
+            
             $totalProductsCount = 0;
             $purchasedProductsCount = 0;
             $nonPurchasedProductsCount = 0;
-
+            
             $totalOrdersCount = 0;
             $servicedOrdersCount = 0;
             $nonServicedOrdersCount = 0;
+            
+            
+            $serviceOrder = new ServiceOrder();
+            $serviceOrder->process_status = 0;
+            $serviceOrder->user_id = auth()->user()->id;
+            $serviceOrder->user_email = auth()->user()->email;
+            $serviceOrder->to_display = 0;
+            $serviceOrder->process = 'dashboard-fetch-statistics';
+            $serviceOrder->display_message = 'Process to fetch dashboard statistics started.';
+            $serviceOrder->response_message = 'Process to fetch dashboard statistics started.';
+
+            
+            
+            $serviceOrder->save();
 
             if (auth()->user()->hasRole('Seller')) {
+
                 /**
                  * If role == Seller
                  * Get product statistics
                  */
+
+                $serviceOrder->process = 'dashboard-fetch-product-statistics';
+                $serviceOrder->display_message = 'Process to fetch dashboard product statistics started.';
+
                 $productActivator = new ProductActivator();
-                $totalProducts = $productActivator->returnAllUserProducts()->paginate();
+                $totalProducts = $productActivator->returnAllUserProducts($serviceOrder)->paginate();
                 $totalProductsCount = count($totalProducts);
                 foreach($totalProducts as $product) {
                     if ($product->purchased == false) {
@@ -50,23 +74,24 @@ class DashboardController extends Controller
                     }
                 }
 
-                // dump("total products: " . count($totalProductsCount));
-                // dump("purchased products: " . $purchasedProductsCount);
-                // dump("non-purchased products: " . $nonPurchasedProductsCount);
-
                 return view('dashboard', 
                             ["totalItems" => ["Total Products" => $totalProductsCount],
                             "servicedItems" => ["Sold Products" => $purchasedProductsCount],
                             "nonServicedItems" => ["Non-Serviced Products" => $nonPurchasedProductsCount]
                             ]);
+
             } else if (auth()->user()->hasRole('Buyer')) {
+
                 /**
                  * If role == Buyer
                  * Get order statistics
                  */
 
+                $serviceOrder->process = 'dashboard-fetch-order-statistics';
+                $serviceOrder->display_message = 'Process to fetch dashboard order statistics started.';
+
                 $orderActivator = new OrderActivator();
-                $totalOrders = $orderActivator->returnAllUserOrders()->get();
+                $totalOrders = $orderActivator->returnAllUserOrders($serviceOrder)->get();
                 $totalOrdersCount = count($totalOrders);
                 
                 foreach($totalOrders as $order) {
@@ -77,9 +102,7 @@ class DashboardController extends Controller
                     }
                 }
 
-                // dump("servicedOrdersCount " . $servicedOrdersCount);
-                // dump("nonServicedOrdersCount" . $nonServicedOrdersCount);
-                // dd("totalOrdersCount " . $totalOrdersCount);
+                $serviceOrder->display_message = 'Process to fetch dashboard order statistics successful.';
 
                 return view('dashboard', 
                             ["totalItems" => ["Total Orders" => $totalOrdersCount],
@@ -88,11 +111,45 @@ class DashboardController extends Controller
                             ]);
 
             } else {
-                dump("Role not in checks. Shld be admin otherwise we been hacked!!!");
-                dd(auth()->user()->getRoleNames());
+
+                $serviceOrder->process = 'dashboard-fetch-admin-statistics';
+                $serviceOrder->display_message = 'Process to fetch dashboard admin statistics started.';
+
+                $orderActivator = new OrderActivator();
+                $totalNonServicedOrders = $orderActivator->returnAllNonServicedOrders($serviceOrder)->get();
+                $totalNonServicedOrdersCount = count($totalNonServicedOrders->toArray());
+
+                $productActivator = new ProductActivator();
+                $totalNonPurchasedProducts = $productActivator->returnAllNonPurchasedProducts($serviceOrder)->get();
+                $totalNonPurchasedProductsCount = count($totalNonPurchasedProducts->toArray());
+
+                $serviceOrder->display_message = 'Process to fetch dashboard admin statistics successful.';
+
+                return view('dashboard-admin', 
+                            [
+                             "nonServicedProducts" => ["Non-Serviced Products" => $totalNonPurchasedProductsCount],
+                             "nonServicedOrders" => ["Non-Serviced Orders" => $totalNonServicedOrdersCount]
+                            ]);
+
             }
         } catch (\Exception $e) {
             // add logic to handle exception here
+
+            $serviceOrder->display_message = 'Process to fetch dashboard statistics failed.';
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = $serviceOrder->response_message . 
+                                                ' Process to fetch dashboard statistics failed.' .
+                                                ' Exception: ' . $e->getMessage();
+
+            $serviceOrder->save();
+
+            return view('dashboard', 
+                        ["totalItems" => ["N/A" => 0],
+                        "servicedItems" => ["N/A" => 0],
+                        "nonServicedItems" => ["N/A" => 0]
+                        ]);
+
         }
     }
 }

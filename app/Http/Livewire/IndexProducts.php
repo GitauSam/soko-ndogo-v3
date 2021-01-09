@@ -37,6 +37,8 @@ class IndexProducts extends Component
             return view('livewire.index-products', ['products' => $products]); 
         } catch(FetchProductException $e) {
             // add logic to handle exception here
+
+            return view('livewire.index-products', ['products' => []]); 
         }
     }
 }

@@ -34,7 +34,7 @@
             <div class="relative">
                 <select
                     class="appearance-none h-full rounded-r border-t sm:rounded-r-none 
-                            sm:border-r-0 border-r border-b block appearance-none w-full 
+                            sm:border-r-0 border-r border-b block w-full 
                             bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 
                             leading-tight focus:outline-none focus:border-l 
                             focus:border-r focus:bg-white focus:border-gray-500">
@@ -124,7 +124,7 @@
                         <td class="flex flex-wrap px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('orders.show', $order->id) }}">Show</a>
                             <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="{{ route('orders.edit', $order->id) }}">Edit</a>
-                            <button wire:click="deactivateProduct('{{ $order->id }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</button>
+                            <button wire:click="deactivateOrder('{{ $order->id }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</button>
                         </td>
                     </tr>
                 @endforeach

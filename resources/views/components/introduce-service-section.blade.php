@@ -9,114 +9,122 @@
 <section>
     <div class="
                 text-black 
-                py-4
                 bg-custom
                 sm:py-8
                 w-full
                 sm:h-auto
             "
     >
-        <div class="
-                container 
-                grid 
-                grid-cols-1 
-                sm:grid-cols-2 
-                gap-8 
-                sm:h-96 
-                mx-auto 
-                overflow-visible"
-        >
-            <div class="text-white sm:py-12 px-16 text-center rounded-lg">
-                <h1 class="sm:text-4xl text-3xl mb font-medium text-white text-center font-mono">
-                    {{ $title }} 
-                </h1>
-                    {{ $slot }}
-                <div class="flex justify-center">
-                    <button class="border-2 
-                                border-white  
-                                rounded-sm 
-                                font-bold 
-                                py-4 
-                                px-6 
-                                mr-2 
-                                flex items-center 
-                                hover:bg-white
-                                hover:text-green-800
-                                hover:border-green-800
-                                bg-transparent 
-                                text-white 
-                                transition ease-in-out duration-500"
-                    >
-                            {{ $action }}
-                    </button>
+        @guest
+            <div class="
+                    container 
+                    grid 
+                    grid-cols-1 
+                    sm:grid-cols-2 
+                    gap-8 
+                    sm:h-96 
+                    mx-auto 
+                    overflow-visible"
+            >
+                <div class="text-white pt-6 sm:pt-24 px-16 text-center rounded-lg sm:h-96">
+                    <h1 class="sm:text-4xl text-3xl mb font-medium text-white text-center font-mono">
+                        {{ $title }} 
+                    </h1>
+                        {{ $slot }}
+                    <div class="flex justify-center">
+                        <button class="border-2 
+                                    border-white  
+                                    rounded-sm 
+                                    font-bold 
+                                    py-4 
+                                    px-6 
+                                    mr-2 
+                                    flex items-center 
+                                    hover:bg-white
+                                    hover:text-green-800
+                                    hover:border-green-800
+                                    bg-transparent 
+                                    text-white 
+                                    transition ease-in-out duration-500"
+                        >
+                                {{ $action }}
+                        </button>
+                    </div>
+                </div>
+                <div class="
+                        text-center 
+                        pt-8 
+                        sm:px-8  
+                        h-96  
+                        sm:mt-20 
+                        mx-auto 
+                        bg-white
+                        rounded-lg 
+                        shadow-xl
+                        z-10">
+
+                        <h1 class="text-2xl 
+                                    mt-4 
+                                    font-medium 
+                                    text-black 
+                                    font-mono"
+                        >
+                            Sign In
+                        </h1>
+                        <form class="pt-4 px-4 mt-6" action="{{ route('login') }}" method="post">
+                            @csrf
+                            <div class="text-justify">
+                                <x-jet-label for="email" value="{{ __('Email') }}" />
+                                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                            </div>
+
+                            <div class="mt-4 text-justify">
+                                <x-jet-label for="password" value="{{ __('Password') }}" />
+                                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                            </div>
+                            <!-- sticky footer -->
+                            <div class="flex mt-8 justify-center px-8">
+                                <x-gen-button id="submit">
+                                    Login
+                                </x-gen-button>
+                            </div>
+                        </form>
                 </div>
             </div>
+        @else
             <div class="
-                    text-center 
-                    pt-8 
-                    sm:px-8  
-                    h-96  
-                    sm:mt-20 
+                    container 
+                    sm:h-96 
                     mx-auto 
-                    bg-gradient-to-r from-indigo-200 via-indigo-100 to-indigo-100 
-                    rounded-lg 
-                    shadow-xl
-                    z-10">
-                <h1 class="text-2xl 
-                            mt-4 
-                            font-medium 
-                            text-black 
-                            font-mono"
-                >
-                    Sign In
-                </h1>
-                <form class="pt-4 px-4 mt-6" action="" method="post">
-                    @csrf
-                    <div class="">
-                        <input 
-                            class="w-full
-                                    bg-transparent
-                                    focus:bg-gray-100 
-                                    border-b
-                                    py-3 
-                                    px-4 
-                                    mb-3 
-                                    leading-tight 
-                                    focus:outline-none 
-                                    focus:border-gray-500" 
-                            id="user-email" 
-                            name="email" 
-                            type="text" 
-                            placeholder="Email"
+                    overflow-visible"
+            >
+                <div class="text-white pt-6 sm:pt-24 px-16 text-center rounded-lg sm:h-96">
+                    <h1 class="sm:text-4xl text-3xl mb font-medium text-white text-center font-mono">
+                        {{ $title }} 
+                    </h1>
+                        {{ $slot }}
+                    <div class="flex justify-center">
+                        <button class="border-2 
+                                    border-white  
+                                    rounded-sm 
+                                    font-bold 
+                                    py-4 
+                                    px-6 
+                                    mr-2 
+                                    flex items-center 
+                                    hover:bg-white
+                                    hover:text-green-800
+                                    hover:border-green-800
+                                    bg-transparent 
+                                    text-white 
+                                    transition ease-in-out duration-500"
                         >
+                                {{ $action }}
+                        </button>
                     </div>
-                    <div class="">
-                        <input 
-                            class="w-full
-                                    bg-transparent
-                                    focus:bg-gray-100 
-                                    border-b
-                                    py-3 
-                                    px-4 
-                                    mb-3 
-                                    leading-tight 
-                                    focus:outline-none 
-                                    focus:border-gray-500" 
-                            id="password" 
-                            name="password" 
-                            type="password" 
-                            placeholder="Password"
-                        >
-                    </div>
-                    <!-- sticky footer -->
-                    <div class="flex mt-8 justify-center px-8">
-                        <x-gen-button id="submit">
-                            Login
-                        </x-gen-button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
+        @endguest
     </div>
     <div class="custom-shape-divider-top-1609233651">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">

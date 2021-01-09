@@ -5,8 +5,8 @@
     </h2>
     <a 
         href="{{ $action }}"
-        class="w-24 h-8 text-center rounded-sm 
-                my-auto mx-1 py-1 bg-green-500 
+        class="w-24 h-8 text-white text-center rounded-sm 
+                my-auto py-1 bg-green-500 
                 hover:bg-green-800 focus:shadow-outline 
                 focus:outline-none">
             {{ $description }}

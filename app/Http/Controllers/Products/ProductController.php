@@ -176,7 +176,7 @@ class ProductController extends Controller
         $serviceOrder->process_status = 0;
         $serviceOrder->user_id = auth()->user()->id;
         $serviceOrder->user_email = auth()->user()->email;
-        $serviceOrder->to_display = 1;
+        $serviceOrder->to_display = 0;
         $serviceOrder->display_message = 'Show Product Process Initiated';
         $serviceOrder->save();
 
@@ -192,10 +192,12 @@ class ProductController extends Controller
             $serviceOrder->display_message = "Unable to show product. Contact admin for assistance.";
             $serviceOrder->process_status = 25;
             $serviceOrder->transaction_status = 99;
-            $serviceOrder->response_message = "Unable to show product product with id: '" 
+            $serviceOrder->response_message = "Unable to show product with id: '" 
                                                 . $id . "'. 
                                                 Error: " . $e->getMessage();
             $serviceOrder->save();
+
+            return redirect()->route('products.index');
 
         } catch (Exception $e) {
 
@@ -206,6 +208,9 @@ class ProductController extends Controller
                                                 . $id . "'. 
                                                 Error: " . $e->getMessage();
             $serviceOrder->save();
+
+            return redirect()->route('products.index');
+
         }
     }
 
@@ -223,7 +228,7 @@ class ProductController extends Controller
         $serviceOrder->process_status = 0;
         $serviceOrder->user_id = auth()->user()->id;
         $serviceOrder->user_email = auth()->user()->email;
-        $serviceOrder->to_display = 1;
+        $serviceOrder->to_display = 0;
         $serviceOrder->display_message = 'Fetch Product (Edit) Process Initiated';
         $serviceOrder->save();
 
@@ -240,7 +245,7 @@ class ProductController extends Controller
             $serviceOrder->display_message = "Unable to edit product. Contact admin for assistance.";
             $serviceOrder->process_status = 25;
             $serviceOrder->transaction_status = 99;
-            $serviceOrder->response_message = "Unable to edit product product with id: '" 
+            $serviceOrder->response_message = "Unable to edit product with id: '" 
                                                 . $id . "'. 
                                                 Error: " . $e->getMessage();
         }
@@ -262,7 +267,7 @@ class ProductController extends Controller
         $serviceOrder->user_id = auth()->user()->id;
         $serviceOrder->user_email = auth()->user()->email;
         $serviceOrder->to_display = 1;
-        $serviceOrder->display_message = 'Saving Product Process Initiated';
+        $serviceOrder->display_message = 'Update Product Process Initiated';
         $serviceOrder->save();
 
         try {

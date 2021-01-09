@@ -6,12 +6,17 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Products\Product;
 use App\Models\Products\ProductImages;
 use App\Modules\Products\ProductImagesActivator;
-use App\Exceptions\FetchProductException;
-use App\Exceptions\EditProductException;
+
+// Exceptions
 use App\Exception;
+use App\Exceptions\FetchProductException;
+use App\Exceptions\FetchNonPurchasedException;
+use App\Exceptions\EditProductException;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\CreateProductException;
+
+// Log imports
 use App\Models\TransactionLog\TransactionLog;
 
 class ProductRepository
@@ -110,12 +115,79 @@ class ProductRepository
     }
 
     public function fetchAllUserProducts() {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "fetch user products";
+
         try {
-            return Product::
-                where([['seller_id', auth()->user()->id], ['status', 1]])
-                ->latest();
+
+            $products = Product::
+                            where([['seller_id', auth()->user()->id], ['status', 1]])
+                            ->latest();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = $serviceOrder->response_message .  " Fetched all user products successfully.";
+            $serviceOrder->display_message = $serviceOrder->display_message . " Fetched all user products successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Fetched all user products successfully.";
+            $transactionLog->save();
+
+            return $products;
         } catch(QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch all user products. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
             throw new FetchProductException($e);
+
+        }
+    }
+
+    public function fetchAllNonPurchasedProducts($serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "fetch non purchased products";
+
+        try {
+    
+            $products = Product::
+                        where([['purchased', FALSE], ['status', 1]])
+                        ->latest();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = $serviceOrder->response_message .  " Fetched non purchased products successfully.";
+            $serviceOrder->display_message = $serviceOrder->display_message . " Fetched non purchased products successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Fetched non purchased products successfully.";
+            $transactionLog->save();
+
+            return $products;
+
+        } catch (QueryException $e) {
+            
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch non purchased products. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchNonPurchasedException($e);
+
+        } catch (Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch non purchased products. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchNonPurchasedException($e);
+
         }
     }
 

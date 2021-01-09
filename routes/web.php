@@ -6,6 +6,7 @@ use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Roles\RoleManagementController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::group(['middleware' => ['auth:sanctum', 'auth:web', 'verified']], functio
                     ->name('assign.roles');
         Route::get('/dashboard', 'App\Http\Controllers\Dashboard\DashboardController@getDashboard')
                     ->name('dashboard');
+        Route::get('/non-purchased-products', 'App\Http\Controllers\Admin\AdminController@indexNonPurchasedProducts')
+                    ->name('non-purchased-products');
 });
 
 Route::get('/', function () { return view('welcome'); })->name('welcome');

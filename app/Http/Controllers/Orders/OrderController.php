@@ -6,8 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateOrder;
 use App\Modules\Orders\OrderActivator;
-use App\Exceptions\FetchOrderException;
+
+// Order Notifications
 use App\Notifications\OrderCreated;
+use App\Notifications\CreateOrderFailed;
+use App\Notifications\UpdateOrderSuccessful;
+use App\Notifications\UpdateOrderFailed;
+
+// Order Exceptions
+use App\Exception;
+use App\Exceptions\FetchOrderException;
+use App\Exceptions\CreateOrderException;
+use App\Exceptions\EditOrderException;
+
+// Log Imports
+use App\Models\ServiceOrder\ServiceOrder;
 
 class OrderController extends Controller
 {
@@ -28,11 +41,42 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'fetch-index-orders';
+        $serviceOrder->process_status = 0;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 0;
+        $serviceOrder->display_message = 'Index Process (GET) Started.';
+
+        $serviceOrder->save();
+
         try {
+
+            $serviceOrder->display_message = 'Index Process (GET) Successful.';
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = 'Index Process (GET) Successful.';
+
+            $serviceOrder->save();
+
             $notifications = auth()->user()->unreadNotifications;
-            return view('orders.index', ['notifications' => $notifications]);          
+            return view('orders.index', ['notifications' => $notifications]);
+                
         } catch(FetchOrderException $e) {
-            // add logic to handle exception here
+            
+            $serviceOrder->display_message = 'Index Process (GET) Failed. Error: ' . $e->message();
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = 'Index Process (GET) Failed. Error: ' . $e->message();
+
+            $serviceOrder->save();
+
+            /**
+             * 
+             * Put explicit failure view here as rest of logic is handled in livewire component.
+             * 
+             * */ 
         }
     }
 
@@ -43,6 +87,19 @@ class OrderController extends Controller
      */
     public function create()
     {
+
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'fetch-create-order';
+        $serviceOrder->display_message = 'Create Process (GET) Successful.';
+        $serviceOrder->process_status = 30;
+        $serviceOrder->transaction_status = 30;
+        $serviceOrder->response_message = 'Create Process (GET) Successful.';
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 0;
+
+        $serviceOrder->save();
+
         return view('orders.create');
     }
 
@@ -54,16 +111,53 @@ class OrderController extends Controller
      */
     public function store(CreateOrder $request)
     {
-        //
+        
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'store-new-order';
+        $serviceOrder->process_status = 1;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 1;
+        $serviceOrder->display_message = 'Saving Order Process Initiated';
+        $serviceOrder->save();
+
         try {
+
             $orderActivator = new OrderActivator();
-            $orderActivator->addOrder($request);
+            $orderActivator->addOrder($request, $serviceOrder);
 
             auth()->user()->notify(new OrderCreated());
 
             return redirect()->route('orders.index');
+
+        } catch (CreateOrderException $e) {
+
+            $serviceOrder->display_message = "Unable to create order '" . $request->order_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to create order '" 
+                                                . $request->order_name . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
+
+            auth()->user()->notify(new CreateOrderFailed());
+
+            return redirect()->route('orders.index');
+
         } catch (Exception $e) {
-            // add logic to handle excpetion here
+            
+            $serviceOrder->display_message = "Unable to create order '" . $request->order_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to create order '" 
+                                                . $request->order_name . "'. 
+                                                Error: " . $e->message();
+            $serviceOrder->save();
+
+            auth()->user()->notify(new CreateOrderFailed());
+
+            return redirect()->route('orders.index');
+
         }
     }
 
@@ -75,13 +169,45 @@ class OrderController extends Controller
      */
     public function show($id)
     {
+
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'show-order';
+        $serviceOrder->process_status = 0;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 0;
+        $serviceOrder->display_message = 'Show Order Process Initiated';
+        $serviceOrder->save();
+
         try {
             $orderActivator = new OrderActivator();
-            $order = $orderActivator->returnOrderById($id);
+            $order = $orderActivator->returnOrderById($id, $serviceOrder);
+
             return view('orders.show',['order' => $order]);
+
         } catch (FetchOrderException $e) {
-            // add logic to handle exception here
+
+            $serviceOrder->display_message = "Unable to show order. Contact admin for assistance.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to show order order with id: '" 
+                                                . $id . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
+
+            return redirect()->route('orders.index');
+
         } catch (Exception $e) {
+
+            $serviceOrder->display_message = "Unable to show order. Contact admin for assistance.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to show order order with id: '" 
+                                                . $id . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
+
+            return redirect()->route('orders.index');
 
         }
     }
@@ -94,13 +220,30 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
+
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'fetch-order-edit';
+        $serviceOrder->process_status = 0;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 0;
+        $serviceOrder->display_message = 'Fetch Order (Edit) Process Initiated';
+        $serviceOrder->save();
+
         try {
             $orderActivator = new OrderActivator();
-            $order = $orderActivator->returnOrderById($id);
+            $order = $orderActivator->returnOrderById($id, $serviceOrder);
 
             return view('orders.edit', ['order' => $order]);
         } catch (Exception $e) {
-            // add logic to handle exception here
+            
+            $serviceOrder->display_message = "Unable to edit order. Contact admin for assistance.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to edit order with id: '" 
+                                                . $id . "'. 
+                                                Error: " . $e->getMessage();
+
         }
     }
 
@@ -113,7 +256,62 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder->process = 'update-order';
+        $serviceOrder->process_status = 1;
+        $serviceOrder->user_id = auth()->user()->id;
+        $serviceOrder->user_email = auth()->user()->email;
+        $serviceOrder->to_display = 1;
+        $serviceOrder->display_message = 'Update Order Process Initiated';
+        $serviceOrder->save();
+
+        try {
+
+            $orderActivator = new OrderActivator();
+            $orderActivator->editOrder($request, $id, $serviceOrder);
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = "Updated order successfully.";
+            $serviceOrder->display_message = "Updated product successfully.";
+            $serviceOrder->save();
+
+            auth()->user()->notify(new UpdateOrderSuccessful());
+
+            return redirect()->route('orders.index');
+
+        } catch (EditOrderException $e) {
+
+            $serviceOrder->display_message = "Unable to update order (NB: Name could be updated)'" 
+                                                . $request->order_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to update order (NB: Name could be updated)'" 
+                                                . $request->order_name . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
+
+            auth()->user()->notify(new UpdateOrderFailed());
+
+            return redirect()->route('orders.index');
+
+        } catch (Exception $e) {
+
+            $serviceOrder->display_message = "Unable to update order (NB: Name could be updated)'" 
+                                                . $request->order_name . "'.";
+            $serviceOrder->process_status = 25;
+            $serviceOrder->transaction_status = 99;
+            $serviceOrder->response_message = "Unable to update order (NB: Name could be updated)'" 
+                                                . $request->order_name . "'. 
+                                                Error: " . $e->getMessage();
+            $serviceOrder->save();
+
+            auth()->user()->notify(new UpdateOrderFailed());
+
+            return redirect()->route('orders.index');
+
+        }
+
     }
 
     /**
