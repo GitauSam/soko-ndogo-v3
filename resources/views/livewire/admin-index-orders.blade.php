@@ -2,7 +2,7 @@
     <livewire:notification-read />
     <x-header-section>
         <x-slot name="title">
-            Non-Purchased Products
+            Non-Serviced Orders
         </x-slot>
         <x-slot name="action">
             {{ route('dashboard') }}
@@ -78,10 +78,6 @@
                         </th>
                         <th
                             class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Price
-                        </th>
-                        <th
-                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             Category
                         </th>
                         <th
@@ -95,31 +91,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($products as $product)
+                @foreach($orders as $order)
                     <tr>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <div class="flex items-center">
                                 <div>
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ $product->product_name }}
+                                        {{ $order->order_name }}
                                     </p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">{{ $product->quantity }} {{ $product->unit }}(s)</p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <p class="text-gray-900 whitespace-no-wrap">
-                                Ksh. {{ $product->price }}/{{ $product->unit }}
-                            </p>
+                            <p class="text-gray-900 whitespace-no-wrap">{{ $order->quantity }} {{ $order->quantity_unit }}(s)</p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <span
                                 class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                 <span aria-hidden
                                     class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                <span class="relative">{{ $product->categories->category_name }}</span>
+                                <span class="relative">{{ $order->category->category_name }}</span>
                             </span>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -127,19 +118,19 @@
                                 class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                                 <span aria-hidden
                                     class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                <span class="relative">{{ \Carbon\Carbon::parse($product->created_at)->format('M d, Y') }}</span>
+                                <span class="relative">{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}</span>
                             </span>
                         </td>
                         <td class="flex flex-wrap px-5 py-5 border-b border-gray-200 justify-center text-sm bg-white">
-                            <a class="text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('proceed.to.purchase.product', $product->id) }}">Proceed To Purchase</a>
-                            <a wire:click="deactivateProduct('{{ $product->id }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</a>
+                            <a class="text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('proceed.to.service.order', $order->id) }}">Proceed To Service</a>
+                            <a wire:click="deactivateProduct('{{ $order->id }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</a>
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
             <div class="px-5 py-2 bg-white border-t flex flex-col xs:flex-row xs:justify-between">
-                {{ $products->links()}}
+                {{ $orders->links()}}
             </div>
         </div>
     </div>

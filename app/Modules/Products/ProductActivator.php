@@ -7,6 +7,7 @@ use App\Models\Products\Product;
 
 class ProductActivator 
 {
+
     public function __construct() {
         $this->model = new Product();
         $this->modelRepository = new ProductRepository($this->model);
@@ -20,12 +21,24 @@ class ProductActivator
         return $this->modelRepository->fetchProductById($id, $serviceOrder);
     }
 
-    public function returnAllUserProducts() {
+    public function returnAllUserProducts($serviceOrder) {
         return $this->modelRepository->fetchAllUserProducts($serviceOrder);
+    }
+
+    public function returnAllPurchasedProducts($serviceOrder) {
+        return $this->modelRepository->fetchAllPurchasedProducts($serviceOrder);
+    }
+
+    public function returnPurchasedProductsByCategory($category, $serviceOrder) {
+        return $this->modelRepository->fetchPurchasedProductsByCategory($category, $serviceOrder);
     }
 
     public function returnAllNonPurchasedProducts($serviceOrder) {
         return $this->modelRepository->fetchAllNonPurchasedProducts($serviceOrder);
+    }
+
+    public function returnAllPurchasedProductsByCategory($category, $serviceOrder) {
+        return $this->modelRepository->fetchAllPurchasedProductsByCategory($category, $serviceOrder);
     }
 
     public function editProduct($data, $id, $serviceOrder) {
@@ -35,6 +48,11 @@ class ProductActivator
     public function removeProduct($id) {
         return $this->modelRepository->deactivateProduct($id);
     }
+
+    public function purchaseProduct($product, $serviceOrder) {
+        return $this->modelRepository->purchaseProduct($product, $serviceOrder);
+    }
+
 }
 
 

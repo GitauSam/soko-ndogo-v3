@@ -35,6 +35,18 @@ class OrderActivator
     public function removeOrder($id, $serviceOrder) {
         return $this->modelRepository->deactivateOrder($id, $serviceOrder);
     }
+
+    public function getNonServicedOrder($id, $serviceOrder) {
+        return $this->modelRepository->fetchNonServicedOrder($id, $serviceOrder);
+    }
+
+    public function returnAllServicedOrders($serviceOrder) {
+        return $this->modelRepository->fetchAllServicedOrders($serviceOrder);
+    }
+
+    public function serviceOrder($order, $serviceOrder) {
+        return $this->modelRepository->serviceOrder($order, $serviceOrder);
+    }
 }
 
 

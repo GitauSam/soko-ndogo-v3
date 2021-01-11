@@ -60,12 +60,10 @@ class DashboardController extends Controller
                  * Get product statistics
                  */
 
-                $serviceOrder->process = 'dashboard-fetch-product-statistics';
-                $serviceOrder->display_message = 'Process to fetch dashboard product statistics started.';
-
                 $productActivator = new ProductActivator();
                 $totalProducts = $productActivator->returnAllUserProducts($serviceOrder)->paginate();
                 $totalProductsCount = count($totalProducts);
+                
                 foreach($totalProducts as $product) {
                     if ($product->purchased == false) {
                         $nonPurchasedProductsCount++;
@@ -73,6 +71,10 @@ class DashboardController extends Controller
                         $purchasedProductsCount++;
                     }
                 }
+
+                $serviceOrder->process = 'dashboard-fetch-product-statistics';
+                $serviceOrder->display_message = 'Process to fetch dashboard product statistics started.';
+                $serviceOrder->save();
 
                 return view('dashboard', 
                             ["totalItems" => ["Total Products" => $totalProductsCount],
@@ -103,6 +105,7 @@ class DashboardController extends Controller
                 }
 
                 $serviceOrder->display_message = 'Process to fetch dashboard order statistics successful.';
+                $serviceOrder->save();
 
                 return view('dashboard', 
                             ["totalItems" => ["Total Orders" => $totalOrdersCount],
@@ -123,12 +126,21 @@ class DashboardController extends Controller
                 $totalNonPurchasedProducts = $productActivator->returnAllNonPurchasedProducts($serviceOrder)->get();
                 $totalNonPurchasedProductsCount = count($totalNonPurchasedProducts->toArray());
 
+                $totalPurchasedProducts = $productActivator->returnAllPurchasedProducts($serviceOrder)->get();
+                $totalPurchasedProductsCount = count($totalPurchasedProducts->toArray());
+
+                $totalServicedOrders = $orderActivator->returnAllServicedOrders($serviceOrder)->get();
+                $totalServicedOrdersCount = count($totalServicedOrders->toArray());
+
                 $serviceOrder->display_message = 'Process to fetch dashboard admin statistics successful.';
+                $serviceOrder->save();
 
                 return view('dashboard-admin', 
                             [
                              "nonServicedProducts" => ["Non-Serviced Products" => $totalNonPurchasedProductsCount],
-                             "nonServicedOrders" => ["Non-Serviced Orders" => $totalNonServicedOrdersCount]
+                             "nonServicedOrders" => ["Non-Serviced Orders" => $totalNonServicedOrdersCount],
+                             "servicedProducts" => ["Purchased Products" => $totalPurchasedProductsCount],
+                             "servicedOrders" => ["Serviced Orders" => $totalServicedOrdersCount]
                             ]);
 
             }

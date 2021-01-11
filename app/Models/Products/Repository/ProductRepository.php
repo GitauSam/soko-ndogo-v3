@@ -10,7 +10,8 @@ use App\Modules\Products\ProductImagesActivator;
 // Exceptions
 use App\Exception;
 use App\Exceptions\FetchProductException;
-use App\Exceptions\FetchNonPurchasedException;
+use App\Exceptions\FetchNonPurchasedProductException;
+use App\Exceptions\FetchPurchasedProductException;
 use App\Exceptions\EditProductException;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -114,7 +115,7 @@ class ProductRepository
         }
     }
 
-    public function fetchAllUserProducts() {
+    public function fetchAllUserProducts($serviceOrder) {
 
         $transactionLog = new TransactionLog();
         $transactionLog->service_order_id = $serviceOrder->id;
@@ -178,7 +179,7 @@ class ProductRepository
             $transactionLog->response_message = "Failed to fetch non purchased products. Excpetion: " .$e->getMessage(). ".";
             $transactionLog->save();
 
-            throw new FetchNonPurchasedException($e);
+            throw new FetchNonPurchasedProductException($e);
 
         } catch (Exception $e) {
 
@@ -186,7 +187,98 @@ class ProductRepository
             $transactionLog->response_message = "Failed to fetch non purchased products. Excpetion: " .$e->getMessage(). ".";
             $transactionLog->save();
 
-            throw new FetchNonPurchasedException($e);
+            throw new FetchNonPurchasedProductException($e);
+
+        }
+
+    }
+
+    public function fetchAllPurchasedProducts($serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "fetch all purchased products";
+
+        try {
+    
+            $products = Product::
+                        where([['purchased', TRUE], ['status', 1]])
+                        ->latest();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = $serviceOrder->response_message .  " Fetched all purchased products successfully.";
+            $serviceOrder->display_message = $serviceOrder->display_message . " Fetched all purchased products successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Fetched all purchased products successfully.";
+            $transactionLog->save();
+
+            return $products;
+
+        } catch (QueryException $e) {
+            
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch all purchased products. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchPurchasedProductException($e);
+
+        } catch (Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch all purchased products. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchPurchasedProductException($e);
+
+        }
+    }
+
+    public function fetchAllPurchasedProductsByCategory($category, $serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "fetch non purchased products by category";
+
+        try {
+    
+            $products = Product::
+                        where(
+                            [['purchased', TRUE], 
+                            ['status', 1]],
+                            ['category', $category],
+                            ['remainder', '!=', '0'])
+                        ->latest();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = $serviceOrder->response_message .  " Fetched non purchased products by category successfully.";
+            $serviceOrder->display_message = $serviceOrder->display_message . " Fetched non purchased products by category successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Fetched non purchased products by category successfully.";
+            $transactionLog->save();
+
+            return $products;
+
+        } catch (QueryException $e) {
+            
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch non purchased products by category. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchNonPurchasedProductException($e);
+
+        } catch (Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch non purchased products by category. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new FetchNonPurchasedProductException($e);
 
         }
     }
@@ -264,6 +356,51 @@ class ProductRepository
         } catch(Exception $e) {
             throw new EditProductException($e);
         }
+    }
+
+    public function purchaseProduct($product, $serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "purchase-product";
+
+        try {
+            
+            $product->purchased = TRUE;
+
+            $product->save();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->product_id = $product->id;
+            $serviceOrder->category_id = $product->category_id;
+            $serviceOrder->response_message = "Purchased product successfully.";
+            $serviceOrder->display_message = "Purchased product successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Purchased product successfully.";
+            $transactionLog->save();
+
+            return $product;
+
+        } catch(QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to purchase product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+
+            throw new EditProductException($e);
+        } catch(Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to purchase product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+            $serviceOrder->save();
+
+            throw new EditProductException($e);
+        }
+
     }
         
 }

@@ -4,12 +4,15 @@ namespace App\Models\Orders\Repository;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Orders\Orders;
+
+// Exceptions
 use App\Exception;
 use Illuminate\Database\QueryException;
 use App\Exceptions\CreateOrderException;
 use App\Exceptions\FetchOrderException;
 use App\Exceptions\DeactivateOrderException;
 use App\Exceptions\EditOrderException;
+use App\Exceptions\ServiceOrderException;
 
 // Log Imports
 use App\Models\ServiceOrder\ServiceOrder;
@@ -23,7 +26,6 @@ class OrderRepository
     
     public function createOrder($data, $serviceOrder) {
 
-        
         $transactionLog = new TransactionLog();
         $transactionLog->event = "create-order";
         $transactionLog->service_order_id = $serviceOrder->id;
@@ -277,6 +279,92 @@ class OrderRepository
             $transactionLog->save();
 
             throw new EditOrderException($e);
+        }
+    }
+
+    public function serviceOrder($order, $serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "service-order";
+        $transactionLog->event_status = 0;
+        $transactionLog->response_message = "";
+        $transactionLog->save();
+        
+        try {
+
+            $order->serviced = TRUE;
+
+            $order->save();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = "Successfully serviced order with ID: " . $order->id . 
+                                                " and name: " . $order->order_name;
+            $serviceOrder->display_message = "Successfully serviced order : " . $order->order_name;
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Successfully serviced order with ID: " . $order->id . 
+                                                    " and name: " . $order->order_name;
+            $transactionLog->save();
+
+        } catch(QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Could not service order name: " . $order->order_name . 
+                                                    ". Error: " . $e->getMessage();
+            $transactionLog->save();
+
+            throw new ServiceOrderException($e);
+
+        } catch(Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Could not service order name: " . $order->order_name . 
+                                                    ". Error: " . $e->getMessage();
+            $transactionLog->save();
+
+            throw new ServiceOrderException($e);
+
+        }
+
+    }
+
+    public function fetchAllServicedOrders($serviceOrder) {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "fetch-serviced-orders";
+        $transactionLog->event_status = 0;
+        $transactionLog->response_message = "";
+        $transactionLog->save();
+
+        try {
+
+            $nonServicedOrders = Orders::
+                                    where([['serviced', TRUE], ['status', 1]])
+                                    ->latest();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->response_message = $serviceOrder->response_message . " Successfully fetched serviced orders";
+            $serviceOrder->display_message = "Successfully fetched serviced orders";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Successfully fetched serviced orders";
+            $transactionLog->save();
+
+            return $nonServicedOrders;
+
+        } catch(QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to fetch serviced orders.";
+            $transactionLog->save();
+
+            throw new FetchOrderException($e);
         }
     }
         
