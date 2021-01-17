@@ -19,6 +19,7 @@ use App\Exceptions\CreateProductException;
 
 // Log imports
 use App\Models\TransactionLog\TransactionLog;
+use App\Models\ServiceOrder\ServiceOrder;
 
 class ProductRepository
 {
@@ -64,6 +65,9 @@ class ProductRepository
             foreach($data->photos as $photo) {
                 $productImagesActivator->addProductImage($product->id, $photo, $serviceOrder);
             }
+
+            return $product;
+
         } catch (QueryException $e) {
 
             $transactionLog->event_status = 25;
@@ -193,7 +197,8 @@ class ProductRepository
 
     }
 
-    public function fetchAllPurchasedProducts($serviceOrder) {
+    public function fetchAllPurchasedProducts($serviceOrder) 
+    {
 
         $transactionLog = new TransactionLog();
         $transactionLog->service_order_id = $serviceOrder->id;
@@ -236,7 +241,8 @@ class ProductRepository
         }
     }
 
-    public function fetchAllPurchasedProductsByCategory($category, $serviceOrder) {
+    public function fetchAllPurchasedProductsByCategory($category, $serviceOrder) 
+    {
 
         $transactionLog = new TransactionLog();
         $transactionLog->service_order_id = $serviceOrder->id;
@@ -283,7 +289,8 @@ class ProductRepository
         }
     }
 
-    public function updateProduct($data, $id, $serviceOrder) {
+    public function updateProduct($data, $id, $serviceOrder) 
+    {
 
         $transactionLog = new TransactionLog();
         $transactionLog->service_order_id = $serviceOrder->id;
@@ -328,6 +335,8 @@ class ProductRepository
                 $transactionLog->save();
             }
 
+            return $product;
+
         } catch(QueryException $e) {
 
             $transactionLog->event_status = 25;
@@ -346,19 +355,60 @@ class ProductRepository
         }
     }
 
-    public function deactivateProduct($id) {
+    public function deactivateProduct($id, $serviceOrder) 
+    {
+
+        $transactionLog = new TransactionLog();
+        $transactionLog->service_order_id = $serviceOrder->id;
+        $transactionLog->event = "deactivate-product";
+
         try {
-            $product = $this->fetchProductById($id);
+
+            $product = $this->fetchProductById($id, $serviceOrder);
             $product->status = 0;
             $product->save();
+
+            $serviceOrder->process_status = 30;
+            $serviceOrder->transaction_status = 30;
+            $serviceOrder->product_id = $product->id;
+            $serviceOrder->category_id = $product->category_id;
+            $serviceOrder->response_message .= " Product with id: " . $id 
+                                                . " and name: " . $product->product_name 
+                                                ." deactivated successfully.";
+            $serviceOrder->display_message .= " Product: " . $product->product_name
+                                                . " deactivated successfully.";
+            $serviceOrder->save();
+
+            $transactionLog->event_status = 30;
+            $transactionLog->response_message = "Product with id: " . $id 
+                                                    . " and name: " . $product->product_name 
+                                                    ." deactivated successfully.";
+            $transactionLog->save();
+
+            return $product;
         } catch (QueryException $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to deactivate product with id: " . $product->id 
+                                                    . ". Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+            $serviceOrder->save();
+
             throw new DeactivateProductException($e);
         } catch(Exception $e) {
+
+            $transactionLog->event_status = 25;
+            $transactionLog->response_message = "Failed to deactivate product with id: " . $product->id 
+                                                    . ". Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->save();
+            $serviceOrder->save();
+
             throw new EditProductException($e);
         }
     }
 
-    public function purchaseProduct($product, $serviceOrder) {
+    public function purchaseProduct($product, $serviceOrder) 
+    {
 
         $transactionLog = new TransactionLog();
         $transactionLog->service_order_id = $serviceOrder->id;
@@ -374,12 +424,16 @@ class ProductRepository
             $serviceOrder->transaction_status = 30;
             $serviceOrder->product_id = $product->id;
             $serviceOrder->category_id = $product->category_id;
-            $serviceOrder->response_message = "Purchased product successfully.";
-            $serviceOrder->display_message = "Purchased product successfully.";
+            $serviceOrder->response_message = "Purchased product with id: " . $product->id 
+                                                . " and name: " . $product->product_name
+                                                . " successfully.";
+            $serviceOrder->display_message = "Purchased product: " . $product->product_name
+                                                . " successfully.";
             $serviceOrder->save();
 
             $transactionLog->event_status = 30;
-            $transactionLog->response_message = "Purchased product successfully.";
+            $transactionLog->response_message = "Purchased product with id: " . $product->id 
+                                                    . "successfully.";
             $transactionLog->save();
 
             return $product;
@@ -387,14 +441,19 @@ class ProductRepository
         } catch(QueryException $e) {
 
             $transactionLog->event_status = 25;
-            $transactionLog->response_message = "Failed to purchase product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->response_message = "Failed to purchase product with id: " . $product->id 
+                                                    . " and name: " . $product->product_name
+                                                    . ". Excpetion: " .$e->getMessage(). ".";
             $transactionLog->save();
+            $serviceOrder->save();
 
             throw new EditProductException($e);
         } catch(Exception $e) {
 
             $transactionLog->event_status = 25;
-            $transactionLog->response_message = "Failed to purchase product. Excpetion: " .$e->getMessage(). ".";
+            $transactionLog->response_message = "Failed to purchase product with id: " . $product->id 
+                                                    . " and name: " . $product->product_name
+                                                    . ". Excpetion: " .$e->getMessage(). ".";
             $transactionLog->save();
             $serviceOrder->save();
 

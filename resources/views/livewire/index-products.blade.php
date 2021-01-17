@@ -133,9 +133,9 @@
                             </span>
                         </td>
                         <td class="flex flex-wrap px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('products.show', $product->id) }}">Show</a>
-                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="{{ route('products.edit', $product->id) }}">Edit</a>
-                            <a wire:click="deactivateProduct('{{ $product->id }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</a>
+                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-yellow-500 hover:bg-yellow-800 focus:shadow-outline focus:outline-none" href="{{ route('products.show', \Illuminate\Support\Facades\Crypt::encryptString($product->id)) }}">Show</a>
+                            <a class="w-16 text-center rounded-sm my-1 mx-1 px-3 py-1 bg-green-500 hover:bg-green-800 focus:shadow-outline focus:outline-none" href="{{ route('products.edit', \Illuminate\Support\Facades\Crypt::encryptString($product->id)) }}">Edit</a>
+                            <button wire:click="deactivateProduct('{{ \Illuminate\Support\Facades\Crypt::encryptString($product->id) }}')" class="w-16 text-center rounded-sm mx-1 my-1 px-3 py-1 bg-red-500 hover:bg-red-800 focus:shadow-outline focus:outline-none">Delete</button>
                         </td>
                     </tr>
                 @endforeach

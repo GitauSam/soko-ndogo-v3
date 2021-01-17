@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DeleteOrderSuccessful extends Notification
+class ProductCreatedSuccessfully extends Notification
 {
     use Queueable;
 
@@ -16,10 +16,12 @@ class DeleteOrderSuccessful extends Notification
      *
      * @return void
      */
-    public function __construct($order_id, $name)
+    public function __construct($prod_id, $name, $quantity, $unit)
     {
-        $this->order_id = $order_id;
+        $this->prod_id = $prod_id;
         $this->name = $name;
+        $this->quantity = $quantity;
+        $this->unit = $unit;
     }
 
     /**
@@ -30,7 +32,7 @@ class DeleteOrderSuccessful extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -42,9 +44,14 @@ class DeleteOrderSuccessful extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Order deleted successfully.')
-                    ->action('Order: ' . $this->name, url('/orders/' . $this->order_id))
-                    ->line('Thank you for shopping with us!');
+                    ->line('Your product was created successfully.')
+                    ->action(
+                            'Product: ' . $this->name
+                            . ', quantity: ' . $this->quantity
+                            . ' ' . $this->unit,
+                            url('/products/' . $this->prod_id)
+                        )
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -56,7 +63,8 @@ class DeleteOrderSuccessful extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'Successfully deleted order: ' . $this->name
+            //
+            'message' => 'Product: ' . $this->name .' was created successfully'
         ];
     }
 }

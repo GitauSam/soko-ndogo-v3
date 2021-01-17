@@ -19,7 +19,7 @@
             </x-header-section>
 
             <div class="bg-white border-2 border-gray-300 lg:rounded lg:shadow-md">
-                <form class="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-auto mt-12" action="{{ route('products.update', $product->id) }}" method="post" enctype="multipart/form-data">
+                <form class="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-auto mt-12" action="{{ route('products.update', \Illuminate\Support\Facades\Crypt::encryptString($product->id)) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     {{method_field('PATCH')}}
                     <div class="flex flex-wrap -mx-3">

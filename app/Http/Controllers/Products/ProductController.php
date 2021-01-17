@@ -4,18 +4,28 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+
 use App\Models\Products\Product;
 use App\Models\Products\ProductImages;
 use App\Models\Products\Repository\ProductRepository;
 use App\Modules\Products\ProductActivator;
 use App\Http\Requests\StoreProduct;
 use App\Http\Requests\UpdateProductDetails;
+use App\Models\Categories\Categories;
+
+// Exception Imports
 use App\Exception;
 use App\Exceptions\CreateProductException;
 use App\Exceptions\FetchProductException;
-use App\Notifications\ProductCreated;
+
+// Notification Imports
+use App\Notifications\ProductCreatedSuccessfully;
+use App\Notifications\ProductUpdatedSuccessfully;
+use App\Notifications\ProductUpdatedFailed;
+
+// Log Imports
 use App\Models\ServiceOrder\ServiceOrder;
-use App\Models\Categories\Categories;
 
 class ProductController extends Controller
 {
@@ -55,7 +65,12 @@ class ProductController extends Controller
             $serviceOrder->save();
 
             $notifications = auth()->user()->unreadNotifications;
-            return view('products.index', ['notifications' => $notifications]); 
+            return view('products.index', 
+                            [
+                                'notifications' => $notifications,
+                                'serviceOrder' => $serviceOrder
+                            ]
+                        ); 
 
         } catch(FetchProductException $e) {
             
@@ -114,7 +129,7 @@ class ProductController extends Controller
 
         }
 
-    }
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -136,9 +151,18 @@ class ProductController extends Controller
 
         try {
             $productActivator = new ProductActivator();
-            $productActivator->addProduct($request, $serviceOrder);
+            $product = $productActivator->addProduct($request, $serviceOrder);
 
-            auth()->user()->notify(new ProductCreated());
+            auth()
+                ->user()
+                ->notify(
+                    new ProductCreatedSuccessfully(
+                        Crypt::encryptString($product->id),
+                        $product->product_name,
+                        $product->quantity,
+                        $product->unit
+                    )
+                );
 
             return redirect()->route('products.index');
         } catch (CreateProductException $e) {
@@ -171,6 +195,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+
+        $id = Crypt::decryptString($id);
+
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'show-product';
         $serviceOrder->process_status = 0;
@@ -212,6 +239,7 @@ class ProductController extends Controller
             return redirect()->route('products.index');
 
         }
+
     }
 
     /**
@@ -223,6 +251,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         
+        $id = Crypt::decryptString($id);
+
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'fetch-product-edit';
         $serviceOrder->process_status = 0;
@@ -249,6 +279,7 @@ class ProductController extends Controller
                                                 . $id . "'. 
                                                 Error: " . $e->getMessage();
         }
+
     }
 
     /**
@@ -261,6 +292,8 @@ class ProductController extends Controller
     public function update(UpdateProductDetails $request, $id)
     {
 
+        $id = Crypt::decryptString($id);
+
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'update-product';
         $serviceOrder->process_status = 1;
@@ -272,7 +305,7 @@ class ProductController extends Controller
 
         try {
             $productActivator = new ProductActivator();
-            $productActivator->editProduct($request, $id, $serviceOrder);
+            $product = $productActivator->editProduct($request, $id, $serviceOrder);
 
             if (!$request->has('photos')) {
 
@@ -284,7 +317,18 @@ class ProductController extends Controller
                 
             }
 
-            return redirect()->route('products.index')->with('success','Product updated successfully');
+            auth()
+                ->user()
+                ->notify(
+                    new ProductUpdatedSuccessfully(
+                        Crypt::encryptString($product->id),
+                        $product->product_name,
+                        $product->quantity,
+                        $product->unit
+                    )
+                );
+
+            return redirect()->route('products.index');
         } catch (Exception $e) {
 
             $serviceOrder->display_message = "Unable to update product (NB: Name could be updated)'" 
@@ -295,7 +339,14 @@ class ProductController extends Controller
                                                 . $request->product_name . "'. 
                                                 Error: " . $e->getMessage();
             $serviceOrder->save();
+
+            auth()
+                ->user()
+                ->notify(new ProductUpdateFailed($request->product_name));
+
+            return redirect()->route('products.index');
         }
+
     }
 
     /**
@@ -306,6 +357,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $id = Crypt::decryptString($id);
     }
 }

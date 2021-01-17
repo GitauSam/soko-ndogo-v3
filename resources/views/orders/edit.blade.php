@@ -14,7 +14,7 @@
         </x-header-section>
                         
         <div class="bg-white border-2 border-gray-300 lg:rounded lg:shadow-md">
-            <form class="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-auto mt-12" action="{{ route('orders.update', $order->id) }}" method="post">
+            <form class="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-auto mt-12" action="{{ route('orders.update', \Illuminate\Support\Facades\Crypt::encryptString($order->id)) }}" method="post">
                 @csrf
                 {{method_field('PATCH')}}
                 <div class="flex flex-wrap -mx-3 mb-6">

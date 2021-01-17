@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateOrder;
 use App\Modules\Orders\OrderActivator;
+use Illuminate\Support\Facades\Crypt;
 
 // Order Notifications
 use App\Notifications\OrderCreated;
+use App\Notifications\OrderCreatedSuccessfully;
 use App\Notifications\CreateOrderFailed;
-use App\Notifications\UpdateOrderSuccessful;
+use App\Notifications\OrderEditedSuccessfully;
 use App\Notifications\UpdateOrderFailed;
 
 // Order Exceptions
@@ -124,9 +126,20 @@ class OrderController extends Controller
         try {
 
             $orderActivator = new OrderActivator();
-            $orderActivator->addOrder($request, $serviceOrder);
+            $order = $orderActivator->addOrder($request, $serviceOrder);
 
             auth()->user()->notify(new OrderCreated());
+
+            auth()
+                ->user()
+                ->notify(
+                    new OrderCreatedSuccessfully(
+                        Crypt::encryptString($order->id),
+                        $order->order_name, 
+                        $order->quantity, 
+                        $order->quantity_unit
+                    )
+                );
 
             return redirect()->route('orders.index');
 
@@ -169,6 +182,8 @@ class OrderController extends Controller
      */
     public function show($id)
     {
+
+        $id = Crypt::decryptString($id);
 
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'show-order';
@@ -221,6 +236,8 @@ class OrderController extends Controller
     public function edit($id)
     {
 
+        $id = Crypt::decryptString($id);
+
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'fetch-order-edit';
         $serviceOrder->process_status = 0;
@@ -256,6 +273,9 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $id = Crypt::decryptString($id);
+
         $serviceOrder = new ServiceOrder();
         $serviceOrder->process = 'update-order';
         $serviceOrder->process_status = 1;
@@ -268,7 +288,7 @@ class OrderController extends Controller
         try {
 
             $orderActivator = new OrderActivator();
-            $orderActivator->editOrder($request, $id, $serviceOrder);
+            $order = $orderActivator->editOrder($request, $id, $serviceOrder);
 
             $serviceOrder->process_status = 30;
             $serviceOrder->transaction_status = 30;
@@ -276,7 +296,16 @@ class OrderController extends Controller
             $serviceOrder->display_message = "Updated product successfully.";
             $serviceOrder->save();
 
-            auth()->user()->notify(new UpdateOrderSuccessful());
+            auth()
+                ->user()
+                ->notify(
+                    new OrderEditedSuccessfully(
+                        Crypt::encryptString($order->id),
+                        $order->order_name, 
+                        $order->quantity, 
+                        $order->quantity_unit
+                    )
+                );
 
             return redirect()->route('orders.index');
 
@@ -322,6 +351,6 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $id = Crypt::decryptString($id);
     }
 }

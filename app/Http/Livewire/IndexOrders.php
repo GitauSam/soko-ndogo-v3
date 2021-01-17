@@ -8,6 +8,7 @@ use App\Exceptions\DeactivateOrderException;
 use App\Exceptions\EditOrderException;
 use App\Exceptions\FetchOrderException;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Crypt;
 
 // Log Imports
 use App\Models\ServiceOrder\ServiceOrder;
@@ -36,9 +37,9 @@ class IndexOrders extends Component
         try {
 
             $orderActivator = new OrderActivator();
-            $orderActivator->removeOrder($id, $serviceOrder);
+            $order = $orderActivator->removeOrder($id, $serviceOrder);
 
-            auth()->user()->notify(new DeleteOrderSuccessful());
+            auth()->user()->notify(new DeleteOrderSuccessful(Crypt::encryptString($order->id), $order->order_name)); 
 
         } catch (DeactivateOrderException $e) {
 
@@ -78,7 +79,7 @@ class IndexOrders extends Component
             $orderActivator = new OrderActivator();
             $orders = $orderActivator
                         ->returnAllUserOrders($serviceOrder)
-                        ->paginate(10);
+                        ->paginate(5);
 
             return view('livewire.index-orders', ["orders" => $orders]);     
         } catch(FetchOrderException $e) {

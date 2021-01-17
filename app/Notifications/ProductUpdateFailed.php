@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ProductCreated extends Notification
+class ProductUpdateFailed extends Notification
 {
     use Queueable;
 
@@ -16,9 +16,9 @@ class ProductCreated extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($name)
     {
-    
+        $this->name = $name;
     }
 
     /**
@@ -55,8 +55,7 @@ class ProductCreated extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
-            'message' => 'Product created successfully'
+            'message' => 'Failed to update product: ' . $this->name
         ];
     }
 }

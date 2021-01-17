@@ -45,8 +45,8 @@ class ProductActivator
         return $this->modelRepository->updateProduct($data, $id, $serviceOrder);
     }
 
-    public function removeProduct($id) {
-        return $this->modelRepository->deactivateProduct($id);
+    public function removeProduct($id, $serviceOrder) {
+        return $this->modelRepository->deactivateProduct($id, $serviceOrder);
     }
 
     public function purchaseProduct($product, $serviceOrder) {

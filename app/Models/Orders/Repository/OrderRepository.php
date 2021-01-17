@@ -63,6 +63,9 @@ class OrderRepository
             $transactionLog->event_status = 30;
             $transactionLog->response_message = "Successfully fetched user orders";
             $transactionLog->save();
+
+            return $order;
+
         } catch (QueryException $e) {
 
             $transactionLog->event_status = 25;
@@ -111,7 +114,7 @@ class OrderRepository
             $transactionLog->response_message = "Failed to fetch order with ID:" . $id . ".";
             $transactionLog->save();
 
-            throw new FetchProductException($e);
+            throw new FetchOrderException($e);
         }
     }
 
@@ -220,6 +223,8 @@ class OrderRepository
                                                     " and name: " . $order->order_name;
             $transactionLog->save();
 
+            return $order;
+
         } catch(QueryException $e) {
 
             $transactionLog->event_status = 25;
@@ -264,6 +269,8 @@ class OrderRepository
             $transactionLog->event_status = 30;
             $transactionLog->response_message = "Successfully deleted order with ID: " . $id . " and name: " . $order->order_name;
             $transactionLog->save();
+
+            return $order;
 
         } catch (QueryException $e) {
 

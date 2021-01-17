@@ -5,10 +5,10 @@
     </h2>
     <a 
         href="{{ $action }}"
-        class="w-24 h-8 text-white text-center rounded-sm 
-                my-auto py-1 bg-green-500 
-                hover:bg-green-800 focus:shadow-outline 
-                focus:outline-none">
+        class="w-28 h-8 text-black text-center rounded-sm 
+                my-auto py-1 bg-green-500 font-semibold
+                hover:bg-green-800 hover:text-white 
+                focus:shadow-outline focus:outline-none">
             {{ $description }}
     </a>
 </div>

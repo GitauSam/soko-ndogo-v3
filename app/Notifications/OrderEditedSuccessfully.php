@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DeleteOrderSuccessful extends Notification
+class OrderEditedSuccessfully extends Notification
 {
     use Queueable;
 
@@ -16,10 +16,12 @@ class DeleteOrderSuccessful extends Notification
      *
      * @return void
      */
-    public function __construct($order_id, $name)
+    public function __construct($order_id, $name, $qty, $qty_unit)
     {
         $this->order_id = $order_id;
         $this->name = $name;
+        $this->qty = $qty;
+        $this->qty_unit = $qty_unit;
     }
 
     /**
@@ -30,7 +32,7 @@ class DeleteOrderSuccessful extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -42,9 +44,16 @@ class DeleteOrderSuccessful extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Order deleted successfully.')
-                    ->action('Order: ' . $this->name, url('/orders/' . $this->order_id))
-                    ->line('Thank you for shopping with us!');
+                    ->line('Order has been edited successfully.')
+                    ->action('Order: '
+                            . $this->name
+                            . ', quantity: '
+                            . $this->qty
+                            . ' '
+                            . $this->qty_unit
+                        , url('/orders/' . $this->order_id)
+                    )
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -56,7 +65,7 @@ class DeleteOrderSuccessful extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'Successfully deleted order: ' . $this->name
+            'message' => 'Updated order successfully'
         ];
     }
 }
